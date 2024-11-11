@@ -34,28 +34,24 @@ const String server = "iot.ac.uma.es";
 const String user = "II16";
 const String pass = "PvC1pkk8";
 
-const String mqtt_server = "iot.ac.uma.es";
-const String mongodb_user = "II16";
-const String mqongodb_pass = "PvC1pkk8";
-
 
 //id and mqtt topics
 String ID_PLACA;
 String CHIPID;
-topic_conexion;
-topic_datos;
-topic_config;
-topic_brightness_get;
-topic_brightness_set;
-topic_color_get;
-topic_color_set;
-topic_switch_get;
-topic_switch_set;
-topic_fota;
+String topic_conexion;
+String topic_datos;
+String topic_config;
+String topic_brightness_get;
+String topic_brightness_set;
+String topic_color_get;
+String topic_color_set;
+String topic_switch_get;
+String topic_switch_set;
+String topic_fota;
 
 
 //other CONST data
-#define PIN_DHT = 5;
+#define PIN_DHT 5
 
 
 
@@ -64,6 +60,11 @@ bool online;
 float hum;
 float temp;
 unsigned long uptime;
+
+int sendMessagesPeriod = 5*60; //in seconds
+int checkUpdatePeriod; //in seconds
+int RGBChangeSpeed; //miliseconds while chaning a ±1% in RGB
+bool stateInterruptor; //se comportará como interruptor de dos estados encendido/apagado (GPIO5).
 
 // unsigned long ultimo_mensaje=0;    
 // int led_status;
@@ -81,15 +82,13 @@ unsigned long uptime;
 void inicio_OTA(){ Serial.println(DEBUG_STRING+"Nuevo Firmware encontrado. Actualizando..."); }
 void final_OTA() { Serial.println(DEBUG_STRING+"Fin OTA. Reiniciando..."); }
 void error_OTA(int e){ Serial.println(DEBUG_STRING+"ERROR OTA: "+String(e)+" "+httpUpdate.getLastErrorString()); }
-void progreso_OTA(int x, int todo)
-{
+void progreso_OTA(int x, int todo){
   int progreso=(int)((x*100)/todo);
   String espacio = (progreso<10)? "  ":(progreso<100)? " " : "";
   if(progreso%10==0) Serial.println(DEBUG_STRING+"Progreso: "+espacio+String(progreso)+"% - "+String(x/1024)+"K de "+String(todo/1024)+"K");
 }
 //-----------------------------------------------------
-void intenta_OTA()
-{ 
+void intenta_OTA(){ 
   Serial.println( "---------------------------------------------" );  
   Serial.print  ( DEBUG_STRING+"MAC de la placa: "); Serial.println(WiFi.macAddress());
   Serial.println( DEBUG_STRING+"Comprobando actualización:" );
@@ -142,14 +141,17 @@ void conecta_wifi() {
 //MQTT connection
 void conecta_mqtt() {
   // Loop until we're reconnected
-  const char* willTopic = topic_conexion;  // El tópico de LWT (conexion_topic)
-  const char* willMessage = "{\"CHIPID\" : \"esp32c3-"+CHIPID+"\", \"online\" : false}";  // Mensaje de LWT para indicar desconexión
+  String willTopicS = topic_conexion;  // El tópico de LWT (conexion_topic)
+  String willMessageS = "{\"CHIPID\" : \"esp32c3-" + CHIPID + "\", \"online\" : false}";  // Mensaje de LWT para indicar desconexión
+  const char* willTopic = willTopicS.c_str();
+  const char* willMessage = willMessageS.c_str();
+
   int willQoS = 1;  // QoS del mensaje de LWT (nivel de calidad)
   bool willRetain = true; 
   while (!mqtt_client.connected()) {
     Serial.print("Intentando conectar a MQTT...");
-    if (mqtt_client.connect(ID_PLACA.c_str(), mqtt_user.c_str(), mqtt_pass.c_str(),willTopic,willQoS,willRetain,willMessage)) {
-      Serial.println(" conectado a broker: " + mqtt_server);
+    if (mqtt_client.connect(ID_PLACA.c_str(), user.c_str(), pass.c_str(),willTopic,willQoS,willRetain,willMessage)) {
+      Serial.println(" conectado a broker: " + server);
       mqtt_client.subscribe(topic_config.c_str());
       mqtt_client.subscribe(topic_brightness_get.c_str());
       mqtt_client.subscribe(topic_color_get.c_str());
@@ -157,6 +159,7 @@ void conecta_mqtt() {
       mqtt_client.subscribe(topic_fota.c_str());
 
       publish_mqtt_message(topic_conexion, mqtt_connection_body(true));
+
     } else {
       Serial.println("ERROR:"+ String(mqtt_client.state()) +" reintento en 5s" );
       // Wait 5 seconds before retrying
@@ -166,37 +169,43 @@ void conecta_mqtt() {
 }
 
 //sends mqtt message
-void publish_mqtt_message(String topic, StaticJsonDocument body){
-  char buffer[512];
-  serializeJson(doc, buffer);
+void publish_mqtt_message(String topic, String body){
+  mqtt_client.publish(topic.c_str(), body.c_str());
 
-  mqtt_client.publish(topic, buffer);
+  Serial.print("Message sent to [");
+  Serial.print(topic);
+  Serial.print("]: ");
+  Serial.println(body);
 }
 
 //-----functions for setting up bodies of mqtt messages-----
-StaticJsonDocument mqtt_connection_body(bool onlineArg) {
-  String onlineString = onlineState ? "true" : "false";
+String mqtt_connection_body(bool onlineArg) {
+  String onlineString = onlineArg ? "true" : "false";
 
   StaticJsonDocument<300> body;
-  body["CHIPID"] = "esp32c3-" + CHIPID;
+  body["CHIPID"] = CHIPID;
   body["online"] = onlineString;
 
-  return body;
+  String buffer;
+  serializeJson(body, buffer);
+  return buffer;
 }
 
-StaticJsonDocument mqtt_data_body(unsigned long UptimeArg, float tempArg, float humArg) {  
+String mqtt_data_body(unsigned long UptimeArg, float tempArg, float humArg) {  
   StaticJsonDocument<300> body;
   body["CHIPID"] = "esp32c3-" + CHIPID;
   body["Uptime"] = UptimeArg;
-  JsonObject dhtData = doc.createNestedObject("DHT11");
+  JsonObject dhtData = body.createNestedObject("DHT11");
   dhtData["temp"] = tempArg;
   dhtData["hum"] = humArg;
-  JsonObject wifiData = doc.createNestedObject("Wifi");
+  JsonObject wifiData = body.createNestedObject("Wifi");
   wifiData["SSId"] = ssid;
   wifiData["IP"] = WiFi.localIP().toString();
   wifiData["RSSI"] = WiFi.RSSI();
 
-  return body;
+  String buffer;
+  serializeJson(body, buffer);
+  return buffer;
 }
 
 //ADD FUNCTIONS FOR ALL PUBLISHED TOPICS
@@ -204,7 +213,7 @@ StaticJsonDocument mqtt_data_body(unsigned long UptimeArg, float tempArg, float 
 
 //process mqtt message
 void procesa_mensaje(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Mensaje recibido en [");
+  Serial.print("Message received from [");
   Serial.print(topic);
   Serial.print("]: ");
   
@@ -215,7 +224,28 @@ void procesa_mensaje(char* topic, byte* payload, unsigned int length) {
 
   Serial.println(mensaje);
 
-  // Parsear el JSON recibido
+  // Process JSON accordingly to the topic
+  if (topic == topic_config) {
+    process_mqtt_config(mensaje);
+  }
+  else if (topic == topic_brightness_get) {
+    process_mqtt_brightness(mensaje);
+  }
+  else if (topic == topic_color_get) {
+    process_mqtt_color(mensaje);
+  }
+  else if (topic == topic_switch_get) {
+    process_mqtt_switch(mensaje);
+  }
+  else if (topic == topic_fota) {
+    process_mqtt_fota();
+  }
+}
+
+//-----functions for processing mqtt messages-----
+//ADD FUNCTIONS FOR ALL SUBSCRIBED TOPICS
+void process_mqtt_config(char* mensaje){
+    // Parsear el JSON recibido
   StaticJsonDocument<200> body;
   DeserializationError error = deserializeJson(body, mensaje);
   if (error) {
@@ -223,39 +253,55 @@ void procesa_mensaje(char* topic, byte* payload, unsigned int length) {
     return;
   }
 
-  // Process JSON accordingly to the topic
-  if (strcmp(topic, topic_config) == 0) {
-    process_mqtt_config(body);
+  //{"envia":300, "actualiza":60, "velocidad":10,"SWITCH":0}
+  if (body["envia"].isNull() || body["actualiza"].isNull() || body["velocidad"].isNull() || body["SWITCH"].isNull()){
+    Serial.println("Something is null");
   }
-  else if (strcmp(topic, topic_brightness_get) == 0) {
-    process_mqtt_brightness(body);
-  }
-  else if (strcmp(topic, topic_color_get) == 0) {
-    process_mqtt_color(body);
-  }
-  else if (strcmp(topic, topic_switch_get) == 0) {
-    process_mqtt_switch(body);
-  }
-  else if (strcmp(topic, topic_fota) == 0) {
-    process_mqtt_fota();
+  else {
+    //every data is correct -- process it
+    Serial.println("All correct");
+
+    //if value is NOT NULL store it
+    sendMessagesPeriod = !body["envia"].isNull() ? body["envia"] : sendMessagesPeriod;
+    checkUpdatePeriod = !body["actualiza"].isNull() ? body["actualiza"] : checkUpdatePeriod;
+    RGBChangeSpeed = !body["velocidad"].isNull() ? body["velocidad"] : RGBChangeSpeed;
+    stateInterruptor = !body["SWITCH"].isNull() ? body["SWITCH"] : stateInterruptor;
   }
 }
 
-//-----functions for processing mqtt messages-----
-//ADD FUNCTIONS FOR ALL SUBSCRIBED TOPICS
-void process_mqtt_config(StaticJsonDocument body){
+void process_mqtt_brightness(char* mensaje){
+    // Parsear el JSON recibido
+  StaticJsonDocument<200> body;
+  DeserializationError error = deserializeJson(body, mensaje);
+  if (error) {
+    Serial.println("Error al deserializar el JSON");
+    return;
+  }
+
 
 }
 
-void process_mqtt_brightness(StaticJsonDocument body){
+void process_mqtt_color(char* mensaje){
+    // Parsear el JSON recibido
+  StaticJsonDocument<200> body;
+  DeserializationError error = deserializeJson(body, mensaje);
+  if (error) {
+    Serial.println("Error al deserializar el JSON");
+    return;
+  }
+
 
 }
 
-void process_mqtt_color(StaticJsonDocument body){
+void process_mqtt_switch(char* mensaje){
+    // Parsear el JSON recibido
+  StaticJsonDocument<200> body;
+  DeserializationError error = deserializeJson(body, mensaje);
+  if (error) {
+    Serial.println("Error al deserializar el JSON");
+    return;
+  }
 
-}
-
-void process_mqtt_switch(StaticJsonDocument body){
 
 }
 
@@ -281,26 +327,26 @@ void setup() { // put your setup code here, to run once:
   ID_PLACA="ESP_" + String( chipId );
   conecta_wifi();
   CHIPID= WiFi.getHostname();
+  Serial.println("CHIPID: "+ CHIPID);
 
   //set up MQTT
-  topic_conexion = "II16/esp32c3-" + CHIPID +"/conexion";
-  topic_datos = "II16/esp32c3-" + CHIPID +"/datos";
-  topic_config = "II16/esp32c3-" + CHIPID +"/config";
-  topic_brightness_get = "II16/esp32c3-" + CHIPID +"/led/brillo";
-  topic_brightness_set = "II16/esp32c3-" + CHIPID +"/led/brillo/estado";
-  topic_color_get = "II16/esp32c3-" + CHIPID +"/led/color";
-  topic_color_set = "II16/esp32c3-" + CHIPID +"/led/color/estado";
-  topic_switch_get = "II16/esp32c3-" + CHIPID +"/switch/cmd";
-  topic_switch_set = "II16/esp32c3-" + CHIPID +"/switch/status";
-  topic_fota = "II16/esp32c3-" + CHIPID +"/FOTA";
-  mqtt_client.setServer(mqtt_server.c_str(), 1883);
+  topic_conexion = "II16/" + CHIPID +"/conexion";
+  topic_datos = "II16/" + CHIPID +"/datos";
+  topic_config = "II16/" + CHIPID +"/config";
+  topic_brightness_get = "II16/" + CHIPID +"/led/brillo";
+  topic_brightness_set = "II16/" + CHIPID +"/led/brillo/estado";
+  topic_color_get = "II16/" + CHIPID +"/led/color";
+  topic_color_set = "II16/" + CHIPID +"/led/color/estado";
+  topic_switch_get = "II16/" + CHIPID +"/switch/cmd";
+  topic_switch_set = "II16/" + CHIPID +"/switch/status";
+  topic_fota = "II16/" + CHIPID +"/FOTA";
+  mqtt_client.setServer(server.c_str(), 1883);
   mqtt_client.setBufferSize(512); // para poder enviar mensajes de hasta X bytes
   mqtt_client.setCallback(procesa_mensaje);
   conecta_mqtt();
-  Serial.println("Board ID: "+ ID_PLACA);
 
-  //set up OTA
-  intenta_OTA(); 
+  //set up OTA -- TODO/check LATER
+  //intenta_OTA(); 
 
   //setup DHT sensor
   dht.setup(PIN_DHT, DHTesp::DHT11);
