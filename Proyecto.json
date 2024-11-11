@@ -1,0 +1,970 @@
+[
+    {
+        "id": "ae0a112c7a29cafc",
+        "type": "tab",
+        "label": "Flujo 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a973318b776548be",
+        "type": "mqtt in",
+        "z": "ae0a112c7a29cafc",
+        "name": "Conexion",
+        "topic": "II16/esp32c3-D6EAF8/conexion",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "8b90fce6ce00d745",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 80,
+        "wires": [
+            [
+                "49ddbb46ebdc520a",
+                "4af34fd73ad9bfda",
+                "a6715b19660afe4e"
+            ]
+        ]
+    },
+    {
+        "id": "81e02957940452b6",
+        "type": "mqtt out",
+        "z": "ae0a112c7a29cafc",
+        "name": "Config",
+        "topic": "II16/esp32c3-D6EAF8/config",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8b90fce6ce00d745",
+        "x": 510,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "9f5ca3f389267e49",
+        "type": "mqtt out",
+        "z": "ae0a112c7a29cafc",
+        "name": "Led / Brillo",
+        "topic": "II16/esp32c3-D6EAF8/led/brillo",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8b90fce6ce00d745",
+        "x": 1010,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "599c513dba14a0fd",
+        "type": "mqtt in",
+        "z": "ae0a112c7a29cafc",
+        "name": "Led/ color",
+        "topic": "II16/esp32c3-D6EAF8/led/color/estado",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "8b90fce6ce00d745",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 100,
+        "y": 1080,
+        "wires": [
+            [
+                "52d1c0e423ac3afe"
+            ]
+        ]
+    },
+    {
+        "id": "a5d21b14920535b0",
+        "type": "mqtt out",
+        "z": "ae0a112c7a29cafc",
+        "name": "Led / color",
+        "topic": "II16/esp32c3-D6EAF8/led/color",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8b90fce6ce00d745",
+        "x": 1010,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "490bd42acb3dbae6",
+        "type": "mqtt in",
+        "z": "ae0a112c7a29cafc",
+        "name": "Led/ brillo",
+        "topic": "II16/esp32c3-D6EAF8/led/brillo/estado",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "8b90fce6ce00d745",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 100,
+        "y": 1000,
+        "wires": [
+            [
+                "643e42d4ffd9d80d"
+            ]
+        ]
+    },
+    {
+        "id": "aa44bf070128b90a",
+        "type": "mqtt out",
+        "z": "ae0a112c7a29cafc",
+        "name": "switch",
+        "topic": "II16/esp32c3-D6EAF8/switch/cmd",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8b90fce6ce00d745",
+        "x": 990,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "dcad8897c4096f9c",
+        "type": "mqtt in",
+        "z": "ae0a112c7a29cafc",
+        "name": "switch",
+        "topic": "II16/esp32c3-D6EAF8/switch/status",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "8b90fce6ce00d745",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 90,
+        "y": 1200,
+        "wires": [
+            [
+                "559d6fc5d52e7cb9"
+            ]
+        ]
+    },
+    {
+        "id": "b2f6ef10e7d10f93",
+        "type": "mqtt out",
+        "z": "ae0a112c7a29cafc",
+        "name": "FOTA",
+        "topic": "II16/esp32c3-D6EAF8/FOTA",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8b90fce6ce00d745",
+        "x": 330,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "aa06107f412902d6",
+        "type": "ui_gauge",
+        "z": "ae0a112c7a29cafc",
+        "name": "",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "gauge",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00B500",
+            "#E6E600",
+            "#CA3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 430,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "643e42d4ffd9d80d",
+        "type": "function",
+        "z": "ae0a112c7a29cafc",
+        "name": "function 1",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 1000,
+        "wires": [
+            [
+                "aa06107f412902d6"
+            ]
+        ]
+    },
+    {
+        "id": "49ddbb46ebdc520a",
+        "type": "debug",
+        "z": "ae0a112c7a29cafc",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 360,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "c9e7020e0200b3f8",
+        "type": "inject",
+        "z": "ae0a112c7a29cafc",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"envia\":300}",
+        "payloadType": "json",
+        "x": 210,
+        "y": 380,
+        "wires": [
+            [
+                "81e02957940452b6"
+            ]
+        ]
+    },
+    {
+        "id": "b567b739f263f822",
+        "type": "ui_slider",
+        "z": "ae0a112c7a29cafc",
+        "name": "",
+        "label": "slider",
+        "tooltip": "",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "className": "",
+        "x": 650,
+        "y": 1000,
+        "wires": [
+            [
+                "2f3d798eabac2c77"
+            ]
+        ]
+    },
+    {
+        "id": "2f3d798eabac2c77",
+        "type": "function",
+        "z": "ae0a112c7a29cafc",
+        "name": "function 2",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 1000,
+        "wires": [
+            [
+                "9f5ca3f389267e49"
+            ]
+        ]
+    },
+    {
+        "id": "2b1a700e85602724",
+        "type": "ui_colour_picker",
+        "z": "ae0a112c7a29cafc",
+        "name": "",
+        "label": "Elige Color",
+        "group": "ad9b57a2988bdc3a",
+        "format": "hex",
+        "outformat": "string",
+        "showSwatch": true,
+        "showPicker": false,
+        "showValue": false,
+        "showHue": false,
+        "showAlpha": false,
+        "showLightness": true,
+        "square": "false",
+        "dynOutput": "false",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 630,
+        "y": 1080,
+        "wires": [
+            [
+                "222b75b2b39dc0db"
+            ]
+        ]
+    },
+    {
+        "id": "222b75b2b39dc0db",
+        "type": "function",
+        "z": "ae0a112c7a29cafc",
+        "name": "Hex2RGB",
+        "func": "// Obtener el color hexadecimal desde el payload\nlet hexColor = msg.payload;\n\n// Verificar que el color esté en formato hexadecimal de 6 caracteres\nif (hexColor.length === 6) {\n    // Convertir el valor hexadecimal a RGB\n    let r = parseInt(hexColor.substring(0, 2), 16);\n    let g = parseInt(hexColor.substring(2, 4), 16);\n    let b = parseInt(hexColor.substring(4, 6), 16);\n    \n    // Crear el objeto con los valores RGB\n    msg.payload = {\n        \"R\": r,\n        \"G\": g,\n        \"B\": b\n    };\n} else {\n    // Si el formato no es correcto, enviar un mensaje de error\n    msg.payload = { \"error\": \"Formato hexadecimal inválido\" };\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 1080,
+        "wires": [
+            [
+                "a5d21b14920535b0"
+            ]
+        ]
+    },
+    {
+        "id": "8699018a8ef47c9a",
+        "type": "ui_led",
+        "z": "ae0a112c7a29cafc",
+        "order": 1,
+        "group": "ad9b57a2988bdc3a",
+        "width": 0,
+        "height": 0,
+        "label": "",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [],
+        "allowColorForValueInMessage": true,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "",
+        "x": 430,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "52d1c0e423ac3afe",
+        "type": "function",
+        "z": "ae0a112c7a29cafc",
+        "name": "RGB2Hex",
+        "func": "function decimalToHex(d) {\n    var hex = d.toString(16);\n    if (hex.length == 1) hex = \"0\" + hex;\n    return hex;\n}\nvar colorHEX = \"#\" + decimalToHex(msg.payload.R)\n    + decimalToHex(msg.payload.G)\n    + decimalToHex(msg.payload.B);\nmsg.colorForValue = {};\nmsg.colorForValue[\"micolor\"] = colorHEX;\nmsg.payload = \"micolor\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 1080,
+        "wires": [
+            [
+                "8699018a8ef47c9a"
+            ]
+        ]
+    },
+    {
+        "id": "a3c55ee292ce43d8",
+        "type": "ui_switch",
+        "z": "ae0a112c7a29cafc",
+        "name": "",
+        "label": "switch",
+        "tooltip": "",
+        "group": "",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 650,
+        "y": 1200,
+        "wires": [
+            [
+                "93f3020814ed235d"
+            ]
+        ]
+    },
+    {
+        "id": "93f3020814ed235d",
+        "type": "function",
+        "z": "ae0a112c7a29cafc",
+        "name": "function 3",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 1200,
+        "wires": [
+            [
+                "aa44bf070128b90a"
+            ]
+        ]
+    },
+    {
+        "id": "559d6fc5d52e7cb9",
+        "type": "function",
+        "z": "ae0a112c7a29cafc",
+        "name": "function 4",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 1200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b9faae2c943d0679",
+        "type": "comment",
+        "z": "ae0a112c7a29cafc",
+        "name": "Se pueden vincular si queremos",
+        "info": "",
+        "x": 450,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "fd633697fb7eab4a",
+        "type": "ui_gauge",
+        "z": "ae0a112c7a29cafc",
+        "name": "",
+        "group": "ed6d530917f8a8dd",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperatura",
+        "label": "°C",
+        "format": "{{payload.DHT11.temp}}",
+        "min": "10",
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 710,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "edd3eaa5a3fbe5a8",
+        "type": "ui_chart",
+        "z": "ae0a112c7a29cafc",
+        "name": "",
+        "group": "ed6d530917f8a8dd",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "label": "Historia de datos",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 770,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5e5bbbf1c34f8e38",
+        "type": "ui_gauge",
+        "z": "ae0a112c7a29cafc",
+        "name": "",
+        "group": "ed6d530917f8a8dd",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humedad",
+        "label": "%",
+        "format": "{{payload.DHT11.hum}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 700,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "f608fbd685b70938",
+        "type": "change",
+        "z": "ae0a112c7a29cafc",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "temperatura",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.DHT11.temp",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 640,
+        "wires": [
+            [
+                "edd3eaa5a3fbe5a8"
+            ]
+        ]
+    },
+    {
+        "id": "f53c23f2c88222ff",
+        "type": "change",
+        "z": "ae0a112c7a29cafc",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "humedad",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.DHT11.hum",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 680,
+        "wires": [
+            [
+                "edd3eaa5a3fbe5a8"
+            ]
+        ]
+    },
+    {
+        "id": "f531eadbeaee5707",
+        "type": "ui_text",
+        "z": "ae0a112c7a29cafc",
+        "group": "ed6d530917f8a8dd",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Últimos datos recibidos:",
+        "format": "{{msg.dateTime}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 750,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "0392f60f0cc13daa",
+        "type": "ui_text",
+        "z": "ae0a112c7a29cafc",
+        "group": "ed6d530917f8a8dd",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Uptime:",
+        "format": "{{payload.Uptime}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 700,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "6b831053987ff995",
+        "type": "function",
+        "z": "ae0a112c7a29cafc",
+        "name": "DateTime",
+        "func": "var currentDate = new Date();\n\nconst currDate = currentDate.getDate() + \"/\"\n    + (currentDate.getMonth() + 1) + \"/\"\n    + currentDate.getFullYear();\n\nvar tempH;\nvar tempM;\nvar tempS;\n\nif (currentDate.getSeconds() >= 10)\n{\n    tempS = currentDate.getSeconds();\n    }\nelse\n{\n    tempS = \"0\" + currentDate.getSeconds();\n}\n\nif (currentDate.getMinutes() >= 10)\n{\n    tempM = currentDate.getMinutes();\n    }\nelse\n{\n    tempM = \"0\" + currentDate.getMinutes();\n}\n\nif (currentDate.getHours() >= 10)\n{\n    tempH = currentDate.getHours();\n    }\nelse\n{\n    tempH = \"0\" + currentDate.getHours();\n}\n\n\nconst currTime = tempH + \":\"\n    + tempM + \":\"\n    + tempS;\n\nmsg.date = currDate;\nmsg.time = currTime;\nmsg.dateTime = currDate + \"  \" + currTime;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 740,
+        "wires": [
+            [
+                "f531eadbeaee5707"
+            ]
+        ]
+    },
+    {
+        "id": "c862d4482aad6f89",
+        "type": "ui_text",
+        "z": "ae0a112c7a29cafc",
+        "group": "ed6d530917f8a8dd",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "SSId:",
+        "format": "{{payload.Wifi.SSId}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 530,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "e5a786df5815e3cf",
+        "type": "ui_text",
+        "z": "ae0a112c7a29cafc",
+        "group": "ed6d530917f8a8dd",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "IP:",
+        "format": "{{payload.Wifi.IP}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 530,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "c6389d5671336d24",
+        "type": "ui_text",
+        "z": "ae0a112c7a29cafc",
+        "group": "ed6d530917f8a8dd",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "RSSI:",
+        "format": "{{payload.Wifi.RSSI}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 530,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "1fbcd9350d9f4d35",
+        "type": "mqtt in",
+        "z": "ae0a112c7a29cafc",
+        "name": "",
+        "topic": "II16/esp32c3-D6EAF8/datos",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "8b90fce6ce00d745",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 540,
+        "wires": [
+            [
+                "0392f60f0cc13daa",
+                "fd633697fb7eab4a",
+                "5e5bbbf1c34f8e38",
+                "f608fbd685b70938",
+                "f53c23f2c88222ff",
+                "6b831053987ff995",
+                "c862d4482aad6f89",
+                "e5a786df5815e3cf",
+                "c6389d5671336d24"
+            ]
+        ]
+    },
+    {
+        "id": "7cd44c525c94fba3",
+        "type": "ui_text",
+        "z": "ae0a112c7a29cafc",
+        "group": "7afb3181e0ad3c33",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Conexion status (if online):",
+        "format": "{{payload.status}}",
+        "layout": "row-left",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 640,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "ef6846983b3acb76",
+        "type": "ui_text",
+        "z": "ae0a112c7a29cafc",
+        "group": "7afb3181e0ad3c33",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Tiempo del mensaje:",
+        "format": "{{msg.dateTime}}",
+        "layout": "row-left",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 560,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "a6715b19660afe4e",
+        "type": "function",
+        "z": "ae0a112c7a29cafc",
+        "name": "DateTime",
+        "func": "var currentDate = new Date();\n\nconst currDate = currentDate.getDate() + \"/\"\n    + (currentDate.getMonth() + 1) + \"/\"\n    + currentDate.getFullYear();\n\nvar tempH;\nvar tempM;\nvar tempS;\n\nif (currentDate.getSeconds() >= 10)\n{\n    tempS = currentDate.getSeconds();\n    }\nelse\n{\n    tempS = \"0\" + currentDate.getSeconds();\n}\n\nif (currentDate.getMinutes() >= 10)\n{\n    tempM = currentDate.getMinutes();\n    }\nelse\n{\n    tempM = \"0\" + currentDate.getMinutes();\n}\n\nif (currentDate.getHours() >= 10)\n{\n    tempH = currentDate.getHours();\n    }\nelse\n{\n    tempH = \"0\" + currentDate.getHours();\n}\n\n\nconst currTime = tempH + \":\"\n    + tempM + \":\"\n    + tempS;\n\nmsg.date = currDate;\nmsg.time = currTime;\nmsg.dateTime = currDate + \"  \" + currTime;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 100,
+        "wires": [
+            [
+                "ef6846983b3acb76"
+            ]
+        ]
+    },
+    {
+        "id": "4af34fd73ad9bfda",
+        "type": "function",
+        "z": "ae0a112c7a29cafc",
+        "name": "online status",
+        "func": "if (msg.payload.online == true)\n{\n    msg.payload.status = \"conectado\"\n}\nelse\n{\n    msg.payload.status = \"desconectado\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 60,
+        "wires": [
+            [
+                "7cd44c525c94fba3"
+            ]
+        ]
+    },
+    {
+        "id": "8b90fce6ce00d745",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "iot.ac.uma.es",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "ad9b57a2988bdc3a",
+        "type": "ui_group",
+        "name": "LEDs",
+        "tab": "0611ff5d7dc4a588",
+        "order": 3,
+        "disp": true,
+        "width": "15",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ed6d530917f8a8dd",
+        "type": "ui_group",
+        "name": "Datos",
+        "tab": "0611ff5d7dc4a588",
+        "order": 2,
+        "disp": true,
+        "width": "15",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7afb3181e0ad3c33",
+        "type": "ui_group",
+        "name": "Conección ESP32C3",
+        "tab": "0611ff5d7dc4a588",
+        "order": 1,
+        "disp": true,
+        "width": "15",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "0611ff5d7dc4a588",
+        "type": "ui_tab",
+        "name": "ESP32C3",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
