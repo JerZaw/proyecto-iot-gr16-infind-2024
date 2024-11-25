@@ -6,6 +6,7 @@
 #include <ArduinoJson.h>
 #include <HTTPUpdate.h>
 #include <HTTPClient.h>
+#include "Button2.h"
 
 // URL para actualización
 // #define OTA_URL  "http://172.16.53.128:1880/esp32-ota/update"// Address of OTA update server
@@ -25,6 +26,7 @@
 WiFiClient wClient;
 PubSubClient mqtt_client(wClient);
 DHTesp dht;
+Button2 button;
 
 //connections data
 const String ssid = "infind";
@@ -52,7 +54,7 @@ String topic_fota;
 
 //other CONST data
 #define PIN_DHT 5
-
+#define BUTTON_PIN  9
 
 
 //state variables
@@ -62,8 +64,8 @@ unsigned long uptime;
 
 //VARIABLES FROM */config
 int sendDataPeriod = 5*60; //period of sending */datos in seconds
-int checkUpdatePeriod; //period of checking OTA in seconds -- if=0, then no periodic check
-int LEDChangePeriod; //period of changing ±1% in LED Brightness, in miliseconds
+int checkUpdatePeriod = 0; //period of checking OTA in seconds -- if=0, then no periodic check
+int LEDChangePeriod = 100; //period of changing ±1% in LED Brightness, in miliseconds
 bool LEDOn = true; //LED state interruptor - onn/off (GPIO5) -- same also in */switch/cmd?
 
 //VARIABLES FROM */switch/cmd
@@ -71,7 +73,7 @@ int LEDOnID;
 // bool LEDOn = true; duplicated?
 
 //VARIABLES FROM */led/brillo
-int aimLEDBrightness = 100; //wanted LED brightness, in range 0-100
+int aimLEDBrightness = 10; //wanted LED brightness, in range 0-100
 int LEDBrightnessID;
 String LEDBrightnessOrigin; //the origin, from where the order came = "pulsador"||"mqtt"
 
@@ -84,10 +86,12 @@ int LEDColorID;
 //OTHER LED STATE VARIABLES
 int currLEDBrightness = aimLEDBrightness; //current LED Brightness, in range 0-100
 bool isLEDOn = true; //LED state interruptor - onn/off (GPIO5).
+bool LEDBrightnessArrived = 1; // if the current LED Brightness already arrived to the aim value
 
 //PERODIC FUNCTIONS VARIABLES
 unsigned long last_data_msg = 0;
 unsigned long last_LEDBrightness_change = 0;
+unsigned long last_FOTA_period = 0;
 
 
 
@@ -237,6 +241,54 @@ String mqtt_data_body(unsigned long UptimeArg, float tempArg, float humArg) {
   return buffer;
 }
 
+String mqtt_brightnessState_body() {  
+  StaticJsonDocument<300> body;
+  body["CHIPID"] = CHIPID;
+  body["LED"] = aimLEDBrightness;
+  body["origen"] = LEDBrightnessOrigin;
+
+  if(LEDBrightnessID != 0){
+    body["id"] = LEDBrightnessID;
+  }
+
+  String buffer;
+  serializeJson(body, buffer);
+  return buffer;
+}
+
+String mqtt_colorState_body() {  
+  StaticJsonDocument<300> body;
+  body["CHIPID"] = CHIPID;
+  body["R"] = r;
+  body["G"] = g;
+  body["B"] = b;
+
+  if(LEDColorID != 0){
+    body["id"] = LEDColorID;
+  }
+
+  String buffer;
+  serializeJson(body, buffer);
+  return buffer;
+}
+
+String mqtt_switch_body() {  
+  StaticJsonDocument<300> body;
+  body["CHIPID"] = CHIPID;
+
+  int level;
+  level = (LEDOn) ? 1 : 0;
+  body["SWITCH"] = level;
+
+  if(LEDOnID != 0){
+    body["id"] = LEDOnID;
+  }
+
+  String buffer;
+  serializeJson(body, buffer);
+  return buffer;
+}
+
 //ADD FUNCTIONS FOR ALL PUBLISHED TOPICS
 //-----------------------------------------------------
 //-----functions for processing mqtt messages-----
@@ -273,7 +325,7 @@ void process_mqtt_brightness(char* message){
 
   // { "level":75 } || { "level":75 , "id":"123456789"}
   aimLEDBrightness = body["level"];
-  LEDBrightnessID = !body["id"].isNull() ? body["id"] : LEDBrightnessID;
+  LEDBrightnessID = !body["id"].isNull() ? body["id"] : 0;
   LEDBrightnessOrigin = "mqtt";
 }
 
@@ -294,7 +346,9 @@ void process_mqtt_color(char* message){
   r = body["R"];
   g = body["G"];
   b = body["B"];
-  LEDColorID = !body["id"].isNull() ? body["id"] : LEDColorID;
+  LEDColorID = !body["id"].isNull() ? body["id"] : 0;
+
+  publish_mqtt_message(topic_color_set, mqtt_colorState_body());
 }
 
 void process_mqtt_switch(char* message){
@@ -312,7 +366,10 @@ void process_mqtt_switch(char* message){
 
   // { "level":0 } || { "level":1 , "id":"123456789"}
   LEDOn = body["level"];
-  LEDOnID = !body["id"].isNull() ? body["id"] : LEDOnID;
+  LEDOnID = !body["id"].isNull() ? body["id"] : 0;
+
+  publish_mqtt_message(topic_switch_set, mqtt_switch_body());
+  
 }
 
 void process_mqtt_fota(){
@@ -356,10 +413,8 @@ void bad_message(){
   Serial.println("Some required in received message is null!");
 }
 
-
 //-----------------------------------------------------
 //-----------------------------------------------------
-
 
 
 
@@ -367,40 +422,60 @@ void bad_message(){
 //-----------------------------------------------------
 // LED MANAGING FUNCTION
 //-----------------------------------------------------
-void updateLED(unsigned long ahoraArg){
-
-  if(!LEDOn) { //if LED should be OFF
-    if(isLEDOn){ //if it's ON for real set it to OFF and return
-      digitalWrite(RGB_BUILTIN,LOW);
+void updateLED(unsigned long ahoraArg) {
+  if (!LEDOn) { // LED should be OFF
+    if (isLEDOn) { // If it’s currently ON, turn it OFF
+      digitalWrite(RGB_BUILTIN, LOW);
       isLEDOn = false;
     }
     return;
   }
-  else { //remember that it's already on and...
+  
+  // If LED is supposed to be ON
   isLEDOn = true;
-  // update LED Brightness, then...
-  // update current RGB colors according to the brightness and rgb values, then...
-  // set the calculated new values to the LED
-  
-  int currR, currG, currB;
 
-  if ((currLEDBrightness != aimLEDBrightness) && (ahoraArg - last_LEDBrightness_change >= LEDChangePeriod)){
-    int difference = aimLEDBrightness-currLEDBrightness;
-    currLEDBrightness += (difference > 0) - (difference < 0); //add +/- 1% brightness
+  // Calculate current RGB values based on brightness
+  int currR = r * currLEDBrightness / 100;
+  int currG = g * currLEDBrightness / 100;
+  int currB = b * currLEDBrightness / 100;
+
+  // Check if brightness needs to change
+  if ((currLEDBrightness != aimLEDBrightness) && 
+      (ahoraArg - last_LEDBrightness_change >= LEDChangePeriod)) {
+      
+    // Adjust brightness toward target (±1%)
+    int difference = aimLEDBrightness - currLEDBrightness;
+    currLEDBrightness += (difference > 0) - (difference < 0); // Increment or decrement by 1%
+
+    // Update the time of the last brightness change
+    last_LEDBrightness_change = ahoraArg;
+
+    // Ensure new RGB values are updated
+    // currR = r * currLEDBrightness / 100;
+    // currG = g * currLEDBrightness / 100;
+    // currB = b * currLEDBrightness / 100;
   }
-  else if ((r == currR) && (g == currG) && (b == currB)){
-    return;
-  }
-  currR = r * currLEDBrightness/100;
-  currG = g * currLEDBrightness/100;
-  currB = b * currLEDBrightness/100;
-  
+
+  // Update LED if brightness or color changes
   rgbLedWrite(RGB_BUILTIN, currR, currG, currB);
+
+  // If brightness reaches the target and color is correct, send MQTT message
+  if ((currLEDBrightness == aimLEDBrightness) && 
+      (currR == r * aimLEDBrightness / 100) && 
+      (currG == g * aimLEDBrightness / 100) && 
+      (currB == b * aimLEDBrightness / 100)) {
+
+    if (!LEDBrightnessArrived) { // Notify once
+      publish_mqtt_message(topic_brightness_set, mqtt_brightnessState_body());
+      LEDBrightnessArrived = true;
+    }
+  } else {
+    LEDBrightnessArrived = false; // Reset flag if not yet arrived
   }
 }
-//-----------------------------------------------------
-//-----------------------------------------------------
 
+//-----------------------------------------------------
+//-----------------------------------------------------
 
 
 
@@ -414,7 +489,7 @@ void measureSendData(unsigned long ahoraArg){ //get measures and send the data
     // get measures
     hum = dht.getHumidity();
     temp = dht.getTemperature();
-    publish_mqtt_message(topic_connection,mqtt_data_body(ahoraArg,temp,hum));
+    publish_mqtt_message(topic_data,mqtt_data_body(ahoraArg,temp,hum));
   }
 }
 //-----------------------------------------------------
@@ -422,6 +497,55 @@ void measureSendData(unsigned long ahoraArg){ //get measures and send the data
 
 
 
+//-----------------------------------------------------
+// FOTA UPDATE PERIOD
+//-----------------------------------------------------
+void FOTAperiod(unsigned long ahoraArg){ //get measures and send the data
+  if ((ahoraArg - last_FOTA_period >= checkUpdatePeriod * 1000) && (checkUpdatePeriod != 0)) { //every X minutes
+    last_FOTA_period = ahoraArg;
+    intenta_OTA();
+  }
+}
+//-----------------------------------------------------
+//-----------------------------------------------------
+
+
+
+
+//-----------------------------------------------------
+// BUTTON MANAGING
+//-----------------------------------------------------
+void singleClick(Button2& btn) {
+  if (LEDOn==false){
+    digitalWrite(RGB_BUILTIN, HIGH);
+    LEDOn=true;
+  }
+  else {
+    digitalWrite(RGB_BUILTIN, LOW);
+    LEDOn=false;
+  }
+  publish_mqtt_message(topic_switch_set, mqtt_switch_body());
+  Serial.println("click\n");
+}
+/*void longClickDetected(Button2& btn) {
+    Serial.println("long click detected");
+}*/
+void longClick(Button2& btn) {
+    intenta_OTA();
+
+    Serial.println("long click\n");
+}
+void doubleClick(Button2& btn) {
+    aimLEDBrightness = 100;
+    LEDBrightnessOrigin = "pulsador";
+
+    Serial.println("double click\n");
+}
+/*void tripleClick(Button2& btn) {
+    Serial.println("triple click\n");
+}*/
+//-----------------------------------------------------
+//-----------------------------------------------------
 
 
 void setup() { // put your setup code here, to run once:
@@ -457,10 +581,19 @@ void setup() { // put your setup code here, to run once:
   connect_mqtt();
 
   //set up OTA -- TODO/check LATER
-  //intenta_OTA(); 
+  intenta_OTA(); 
 
   //setup DHT sensor
   dht.setup(PIN_DHT, DHTesp::DHT11);
+
+  //setup BUTTON MANAGEMENT
+  button.begin(BUTTON_PIN);
+  button.setClickHandler(singleClick);
+  button.setLongClickHandler(longClick);
+  button.setDoubleClickHandler(doubleClick);
+  //button.setTripleClickHandler(tripleClick);
+  pinMode(RGB_BUILTIN, OUTPUT);
+  pinMode(BUTTON_PIN , INPUT_PULLUP);
 
   Serial.println("Setup finished in " +  String(millis()) + " ms");
 }      
@@ -472,9 +605,13 @@ void loop() { // put your main code here, to run repeatedly:
   }
   mqtt_client.loop(); // esta llamada para que la librería recupere el control
   
+  button.loop();
+
   unsigned long ahora = millis();
   
   measureSendData(ahora); //measure and send DHT data periodically
 
   updateLED(ahora); //update LED values if necessary
+
+  FOTAperiod(ahora);//update FOTA period
 }
