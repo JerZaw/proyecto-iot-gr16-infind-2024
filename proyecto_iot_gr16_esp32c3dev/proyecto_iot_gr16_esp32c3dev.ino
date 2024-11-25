@@ -159,6 +159,27 @@ void connect_wifi() {
 //-----------------------------------------------------
 //MQTT
 //-----------------------------------------------------
+//sends mqtt message
+void publish_mqtt_message(String topic, String body, bool isRetained = false){
+  //TODO: CHECK IF "IF" AND RETAINED MSG WORKS
+  if(isRetained)
+  {
+    char buffer[256];
+    body.toCharArray(buffer, 256);
+
+    mqtt_client.publish(topic.c_str(), (const uint8_t*)buffer , body.length(), isRetained);
+    Serial.print("RETAINED Message sent to [");
+  }
+  else
+  {
+    mqtt_client.publish(topic.c_str(), body.c_str());
+    Serial.print("Message sent to [");
+  }
+  Serial.print(topic);
+  Serial.print("]: ");
+  Serial.println(body);
+}
+
 //MQTT connection
 void connect_mqtt() {
   // Loop until we're reconnected
@@ -184,24 +205,6 @@ void connect_mqtt() {
       delay(5000);
     }
   }
-}
-
-//sends mqtt message
-void publish_mqtt_message(String topic, String body, bool isRetained = false){
-  //TODO: CHECK IF "IF" AND RETAINED MSG WORKS
-  if(isRetained)
-  {
-    mqtt_client.publish(topic.c_str(), body.c_str(), body.length(), isRetained);
-    Serial.print("RETAINED Message sent to [");
-  }
-  else
-  {
-    mqtt_client.publish(topic.c_str(), body.c_str());
-    Serial.print("Message sent to [");
-  }
-  Serial.print(topic);
-  Serial.print("]: ");
-  Serial.println(body);
 }
 
 //-----functions for setting up bodies of mqtt messages-----
@@ -236,43 +239,6 @@ String mqtt_data_body(unsigned long UptimeArg, float tempArg, float humArg) {
 
 //ADD FUNCTIONS FOR ALL PUBLISHED TOPICS
 //-----------------------------------------------------
-
-//process mqtt message
-void process_msg(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message received from [");
-  Serial.print(topic);
-  Serial.print("]: ");
-  
-  // Convertir el payload a un string
-  char message[length + 1];
-  strncpy(message, (char*)payload, length);
-  message[length] = '\0'; 
-
-  Serial.println(message);
-
-  // Process JSON accordingly to the topic
-  if (topic == topic_config) {
-    process_mqtt_config(message);
-  }
-  else if (topic == topic_brightness_get) {
-    process_mqtt_brightness(message);
-  }
-  else if (topic == topic_color_get) {
-    process_mqtt_color(message);
-  }
-  else if (topic == topic_switch_get) {
-    process_mqtt_switch(message);
-  }
-  else if (topic == topic_fota) {
-    process_mqtt_fota();
-  }
-}
-
-void bad_message(){
-  Serial.print("[ERROR]: ");
-  Serial.println("Some required in received message is null!");
-}
-
 //-----functions for processing mqtt messages-----
 //ADD FUNCTIONS FOR ALL SUBSCRIBED TOPICS
 void process_mqtt_config(char* message){
@@ -288,9 +254,8 @@ void process_mqtt_config(char* message){
   //if value is NOT NULL store it
   sendDataPeriod = !body["envia"].isNull() ? body["envia"] : sendDataPeriod;
   checkUpdatePeriod = !body["actualiza"].isNull() ? body["actualiza"] : checkUpdatePeriod;
-  RGBChangeSpeed = !body["velocidad"].isNull() ? body["velocidad"] : RGBChangeSpeed;
-  stateInterruptor = !body["SWITCH"].isNull() ? body["SWITCH"] : stateInterruptor;
-  }
+  LEDChangePeriod = !body["velocidad"].isNull() ? body["velocidad"] : LEDChangePeriod;
+  LEDOn = !body["SWITCH"].isNull() ? body["SWITCH"] : LEDOn;
 }
 
 void process_mqtt_brightness(char* message){
@@ -307,7 +272,7 @@ void process_mqtt_brightness(char* message){
   }
 
   // { "level":75 } || { "level":75 , "id":"123456789"}
-  LEDBrightness = body["level"];
+  aimLEDBrightness = body["level"];
   LEDBrightnessID = !body["id"].isNull() ? body["id"] : LEDBrightnessID;
   LEDBrightnessOrigin = "mqtt";
 }
@@ -353,6 +318,45 @@ void process_mqtt_switch(char* message){
 void process_mqtt_fota(){
   intenta_OTA();
 }
+
+
+//process mqtt message
+void process_msg(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Message received from [");
+  Serial.print(topic);
+  Serial.print("]: ");
+  
+  // Convertir el payload a un string
+  char message[length + 1];
+  strncpy(message, (char*)payload, length);
+  message[length] = '\0'; 
+
+  Serial.println(message);
+
+  // Process JSON accordingly to the topic
+  if (topic == topic_config) {
+    process_mqtt_config(message);
+  }
+  else if (topic == topic_brightness_get) {
+    process_mqtt_brightness(message);
+  }
+  else if (topic == topic_color_get) {
+    process_mqtt_color(message);
+  }
+  else if (topic == topic_switch_get) {
+    process_mqtt_switch(message);
+  }
+  else if (topic == topic_fota) {
+    process_mqtt_fota();
+  }
+}
+
+void bad_message(){
+  Serial.print("[ERROR]: ");
+  Serial.println("Some required in received message is null!");
+}
+
+
 //-----------------------------------------------------
 //-----------------------------------------------------
 
@@ -404,13 +408,13 @@ void updateLED(unsigned long ahoraArg){
 // DHT DATA FUNCTION
 //-----------------------------------------------------
 void measureSendData(unsigned long ahoraArg){ //get measures and send the data
-  if (ahora - last_data_msg >= sendDataPeriod * 1000) { //every 5 minutes
-    last_data_msg = ahora;
+  if (ahoraArg - last_data_msg >= sendDataPeriod * 1000) { //every 5 minutes
+    last_data_msg = ahoraArg;
 
     // get measures
     hum = dht.getHumidity();
     temp = dht.getTemperature();
-    publish_mqtt_message(topic_connection,mqtt_data_body(ahora,temp,hum));
+    publish_mqtt_message(topic_connection,mqtt_data_body(ahoraArg,temp,hum));
   }
 }
 //-----------------------------------------------------
@@ -472,5 +476,5 @@ void loop() { // put your main code here, to run repeatedly:
   
   measureSendData(ahora); //measure and send DHT data periodically
 
-  updateLED(); //update LED values if necessary
+  updateLED(ahora); //update LED values if necessary
 }
