@@ -3,3 +3,12 @@ Repository for group 16's final project for Informática Industrial in academic 
 
 El usuario y clave son válidos para MQTT y mongoDB en iot.ac.uma.es
 usuario: II16 , clave: PvC1pkk8
+
+what's left for sure:
+NODE-RED:
+- telegram brightness
+- automatic update of brightness on the slider
+- config message
+- OTA message
+- mongodb
+- ?????
