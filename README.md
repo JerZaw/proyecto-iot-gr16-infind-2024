@@ -9,8 +9,6 @@ token para el bot de telegram:
 
 what's left for sure:
 NODE-RED:
-- telegram brightness
-- automatic update of brightness on the slider
 - config message
 - OTA message
 - mongodb
