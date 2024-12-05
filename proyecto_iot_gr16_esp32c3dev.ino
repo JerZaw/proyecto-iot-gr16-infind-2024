@@ -1,4 +1,4 @@
-    #include "DHTesp.h"
+#include "DHTesp.h"
 #define rgbLedWrite neopixelWrite //se sustituye el rgbledwrite por neopixelwrite ya que la version no es la mas reciente
 #include <string>
 #include <WiFi.h>
@@ -53,7 +53,7 @@ String topic_fota;
 
 
 //other CONST data
-#define PIN_DHT 5
+#define PIN_DHT 4
 #define BUTTON_PIN  9
 
 
@@ -544,22 +544,20 @@ void doubleClick(Button2& btn) {
 //-----------------------------------------------------
 
 
-void setup() { // put your setup code here, to run once:
-  Serial.begin(115200);
-  Serial.println();
-  Serial.println("Start setup...");
-
+void setupWiFi(){
   // crea topics usando id de la placa
   // ChipID
   uint32_t chipId = 0;
   for (int i = 0; i < 17; i = i + 8) {
-    chipId |= ((ESP.getEfuseMac() >> (40 - i)) & 0xff) << i;
+    chipId = ((ESP.getEfuseMac() >> (40 - i)) & 0xff) << i;
   }
   ID_PLACA="ESP_" + String( chipId );
   connect_wifi();
   CHIPID= WiFi.getHostname();
   Serial.println("CHIPID: "+ CHIPID);
+}
 
+void setupMqtt(){
   //set up MQTT
   topic_connection = "II16/" + CHIPID +"/conexion";
   topic_data = "II16/" + CHIPID +"/datos";
@@ -575,6 +573,29 @@ void setup() { // put your setup code here, to run once:
   mqtt_client.setBufferSize(512); // para poder enviar messages de hasta X bytes
   mqtt_client.setCallback(process_msg);
   connect_mqtt();
+}
+
+void setupButton(){
+  button.begin(BUTTON_PIN);
+  button.setClickHandler(singleClick);
+  button.setLongClickHandler(longClick);
+  button.setDoubleClickHandler(doubleClick);
+  //button.setTripleClickHandler(tripleClick);
+  pinMode(RGB_BUILTIN, OUTPUT);
+  pinMode(BUTTON_PIN , INPUT_PULLUP);
+}
+
+
+void setup() { // put your setup code here, to run once:
+  Serial.begin(115200);
+  Serial.println();
+  Serial.println("Start setup...");
+
+  //set up WiFi connection and de
+  setupWiFi();
+
+  //set up MQTT
+  setupMqtt();
 
   //set up OTA -- TODO/check LATER
   intenta_OTA(); 
@@ -583,13 +604,7 @@ void setup() { // put your setup code here, to run once:
   dht.setup(PIN_DHT, DHTesp::DHT11);
 
   //setup BUTTON MANAGEMENT
-  button.begin(BUTTON_PIN);
-  button.setClickHandler(singleClick);
-  button.setLongClickHandler(longClick);
-  button.setDoubleClickHandler(doubleClick);
-  //button.setTripleClickHandler(tripleClick);
-  pinMode(RGB_BUILTIN, OUTPUT);
-  pinMode(BUTTON_PIN , INPUT_PULLUP);
+  setupButton();
 
   Serial.println("Setup finished in " +  String(millis()) + " ms");
 }      
