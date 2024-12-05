@@ -75,12 +75,37 @@
             "ae7656d195a3a244",
             "43f999a0952c319b",
             "05eb903fe4be6d37",
-            "8568acb5fd35a1b1"
+            "8568acb5fd35a1b1",
+            "a92e06cc50cde2e1"
         ],
         "x": 794,
         "y": 659,
         "w": 572,
         "h": 222
+    },
+    {
+        "id": "5ff9e86f9698e695",
+        "type": "group",
+        "z": "c56d6c2de4c28875",
+        "name": "Conexión",
+        "style": {
+            "fill": "#dbcbe7",
+            "label": true,
+            "fill-opacity": "0.49"
+        },
+        "nodes": [
+            "e493744c4d53c551",
+            "92aab530a24cdf5f",
+            "4f6ee14e84c47401",
+            "a2b5e6b77e01b75a",
+            "b118104fe90db9c6",
+            "127ca1831f227bec",
+            "c2ae8c489e5dce55"
+        ],
+        "x": 34,
+        "y": 139,
+        "w": 532,
+        "h": 182
     },
     {
         "id": "16fded412834b3bb",
@@ -99,9 +124,9 @@
             "8a83848f4ef7a0e2",
             "355abadc47d12743",
             "225cadd35fa60a1c",
-            "d74a2eb3231ed44a",
             "f233c41046b20782",
-            "a325535685f12bbf"
+            "c2dc9c526f63f3ec",
+            "97050e68396087d6"
         ],
         "x": 54,
         "y": 359,
@@ -131,34 +156,10 @@
             "759db0777e841359",
             "da678a61bc41b129"
         ],
-        "x": 694,
+        "x": 714,
         "y": 359,
-        "w": 652,
+        "w": 632,
         "h": 262
-    },
-    {
-        "id": "5ff9e86f9698e695",
-        "type": "group",
-        "z": "c56d6c2de4c28875",
-        "name": "Conexión",
-        "style": {
-            "fill": "#dbcbe7",
-            "label": true,
-            "fill-opacity": "0.49"
-        },
-        "nodes": [
-            "e493744c4d53c551",
-            "92aab530a24cdf5f",
-            "4f6ee14e84c47401",
-            "a2b5e6b77e01b75a",
-            "b118104fe90db9c6",
-            "127ca1831f227bec",
-            "c2ae8c489e5dce55"
-        ],
-        "x": 34,
-        "y": 139,
-        "w": 532,
-        "h": 182
     },
     {
         "id": "577706416446e535",
@@ -221,7 +222,7 @@
         "correl": "",
         "expiry": "",
         "broker": "dcc291bb801e1410",
-        "x": 1180,
+        "x": 1240,
         "y": 520,
         "wires": []
     },
@@ -240,7 +241,7 @@
         "correl": "",
         "expiry": "",
         "broker": "dcc291bb801e1410",
-        "x": 500,
+        "x": 560,
         "y": 580,
         "wires": []
     },
@@ -361,14 +362,14 @@
         "z": "c56d6c2de4c28875",
         "g": "16fded412834b3bb",
         "name": "RGB2Hex",
-        "func": "function decimalToHex(d) {\n    var hex = d.toString(16);\n    if (hex.length == 1) hex = \"0\" + hex;\n    return hex;\n}\nvar colorHEX = \"#\" + decimalToHex(msg.payload.R)\n    + decimalToHex(msg.payload.G)\n    + decimalToHex(msg.payload.B);\nmsg.colorForValue = {};\nmsg.colorForValue[\"micolor\"] = colorHEX;\nmsg.payload = \"micolor\";\nreturn msg;",
+        "func": "function decimalToHex(d) {\n    var hex = d.toString(16);\n    if (hex.length == 1) hex = \"0\" + hex;\n    return hex;\n}\n\nif (msg.payload.R != null){\n    var colorHEX = \"#\" + decimalToHex(msg.payload.R)\n    + decimalToHex(msg.payload.G)\n    + decimalToHex(msg.payload.B);\n}\nelse if (msg.payload.level != null){\n    var colorHEX = \"#\" + decimalToHex(flow.get(\"R\") * msg.payload.level)\n    + decimalToHex(flow.get(\"G\") * msg.payload.level)\n    + decimalToHex(flow.get(\"B\") * msg.payload.level);\n}\n\nmsg.colorForValue = {};\nmsg.colorForValue[\"micolor\"] = colorHEX;\nmsg.payload = \"micolor\";\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
+        "x": 360,
         "y": 460,
         "wires": [
             [
@@ -521,29 +522,7 @@
         "y": 580,
         "wires": [
             [
-                "d74a2eb3231ed44a",
-                "f233c41046b20782"
-            ]
-        ]
-    },
-    {
-        "id": "d74a2eb3231ed44a",
-        "type": "function",
-        "z": "c56d6c2de4c28875",
-        "g": "16fded412834b3bb",
-        "name": "Hex2RGB",
-        "func": "// Obtener el color hexadecimal desde el payload\nlet hexColor = msg.payload;\n\n// Verificar que el color esté en formato hexadecimal de 6 caracteres\nif (hexColor.length === 6) {\n    // Convertir el valor hexadecimal a RGB\n    let r = parseInt(hexColor.substring(0, 2), 16);\n    let g = parseInt(hexColor.substring(2, 4), 16);\n    let b = parseInt(hexColor.substring(4, 6), 16);\n    \n    // Crear el objeto con los valores RGB\n    msg.payload = {\n        \"R\": r,\n        \"G\": g,\n        \"B\": b\n    };\n} else {\n    // Si el formato no es correcto, enviar un mensaje de error\n    msg.payload = { \"error\": \"Formato hexadecimal inválido\" };\n}\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 320,
-        "y": 580,
-        "wires": [
-            [
-                "4c0d83eaf2ebf96b"
+                "c2dc9c526f63f3ec"
             ]
         ]
     },
@@ -559,7 +538,7 @@
         "order": 5,
         "width": 0,
         "height": 0,
-        "passthru": false,
+        "passthru": true,
         "outs": "end",
         "topic": "topic",
         "topicType": "msg",
@@ -567,7 +546,7 @@
         "max": "100",
         "step": 1,
         "className": "",
-        "x": 840,
+        "x": 920,
         "y": 520,
         "wires": [
             [
@@ -588,7 +567,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1000,
+        "x": 1060,
         "y": 520,
         "wires": [
             [
@@ -1007,8 +986,8 @@
         "correl": "",
         "expiry": "",
         "broker": "dcc291bb801e1410",
-        "x": 1070,
-        "y": 140,
+        "x": 810,
+        "y": 120,
         "wires": []
     },
     {
@@ -1025,8 +1004,8 @@
         "correl": "",
         "expiry": "",
         "broker": "dcc291bb801e1410",
-        "x": 1230,
-        "y": 160,
+        "x": 970,
+        "y": 140,
         "wires": []
     },
     {
@@ -1060,7 +1039,8 @@
         "y": 840,
         "wires": [
             [
-                "cb87577f66361811"
+                "cb87577f66361811",
+                "a92e06cc50cde2e1"
             ]
         ]
     },
@@ -1109,32 +1089,6 @@
         "wires": []
     },
     {
-        "id": "85957080b7bd9c7d",
-        "type": "telegram command",
-        "z": "c56d6c2de4c28875",
-        "name": "",
-        "command": "/start",
-        "description": "",
-        "registercommand": false,
-        "language": "",
-        "scope": "default",
-        "bot": "e2e809aeef1c8de1",
-        "strict": false,
-        "hasresponse": true,
-        "useregex": false,
-        "removeregexcommand": false,
-        "outputs": 2,
-        "x": 290,
-        "y": 1060,
-        "wires": [
-            [
-                "41fa040bbda5a648",
-                "f0e1fbba0a87f739"
-            ],
-            []
-        ]
-    },
-    {
         "id": "41fa040bbda5a648",
         "type": "function",
         "z": "c56d6c2de4c28875",
@@ -1153,20 +1107,6 @@
                 "37d52fc1acb14280",
                 "96092f82238d7a87"
             ]
-        ]
-    },
-    {
-        "id": "37d52fc1acb14280",
-        "type": "telegram sender",
-        "z": "c56d6c2de4c28875",
-        "name": "",
-        "bot": "e2e809aeef1c8de1",
-        "haserroroutput": false,
-        "outputs": 1,
-        "x": 750,
-        "y": 1060,
-        "wires": [
-            []
         ]
     },
     {
@@ -1200,48 +1140,6 @@
         "x": 720,
         "y": 1020,
         "wires": []
-    },
-    {
-        "id": "28b9876cfbbb8399",
-        "type": "telegram command",
-        "z": "c56d6c2de4c28875",
-        "name": "",
-        "command": "/Apaga_LED",
-        "description": "",
-        "registercommand": false,
-        "language": "",
-        "scope": "default",
-        "bot": "e2e809aeef1c8de1",
-        "strict": false,
-        "hasresponse": true,
-        "useregex": false,
-        "removeregexcommand": false,
-        "outputs": 2,
-        "x": 270,
-        "y": 1140,
-        "wires": [
-            [
-                "ed748bef99cea673"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "cba8f1c3a77385f6",
-        "type": "telegram receiver",
-        "z": "c56d6c2de4c28875",
-        "name": "",
-        "bot": "e2e809aeef1c8de1",
-        "saveDataDir": "",
-        "filterCommands": true,
-        "x": 250,
-        "y": 1020,
-        "wires": [
-            [
-                "41fa040bbda5a648"
-            ],
-            []
-        ]
     },
     {
         "id": "ed748bef99cea673",
@@ -1278,26 +1176,9 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 520,
-        "y": 540,
-        "wires": []
-    },
-    {
-        "id": "a325535685f12bbf",
-        "type": "link in",
-        "z": "c56d6c2de4c28875",
-        "g": "16fded412834b3bb",
-        "name": "On/Off hacia el LED",
-        "links": [
-            "b478b2679b7c8e35"
-        ],
-        "x": 485,
+        "x": 560,
         "y": 500,
-        "wires": [
-            [
-                "6ee224836a9838c2"
-            ]
-        ]
+        "wires": []
     },
     {
         "id": "b478b2679b7c8e35",
@@ -1312,31 +1193,6 @@
         "x": 565,
         "y": 1160,
         "wires": []
-    },
-    {
-        "id": "786f83de1cece149",
-        "type": "telegram command",
-        "z": "c56d6c2de4c28875",
-        "name": "",
-        "command": "/Enciende_LED",
-        "description": "",
-        "registercommand": false,
-        "language": "",
-        "scope": "default",
-        "bot": "e2e809aeef1c8de1",
-        "strict": false,
-        "hasresponse": true,
-        "useregex": false,
-        "removeregexcommand": false,
-        "outputs": 2,
-        "x": 260,
-        "y": 1180,
-        "wires": [
-            [
-                "b6bdb14aafab8b0f"
-            ],
-            []
-        ]
     },
     {
         "id": "b6bdb14aafab8b0f",
@@ -1368,52 +1224,13 @@
         "links": [
             "b478b2679b7c8e35"
         ],
-        "x": 1155,
+        "x": 1165,
         "y": 800,
         "wires": [
             [
+                "a92e06cc50cde2e1",
                 "cb87577f66361811"
             ]
-        ]
-    },
-    {
-        "id": "9c80147a065aa224",
-        "type": "telegram sender",
-        "z": "c56d6c2de4c28875",
-        "name": "LED On/Off",
-        "bot": "e2e809aeef1c8de1",
-        "haserroroutput": false,
-        "outputs": 1,
-        "x": 730,
-        "y": 1160,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "caa65d291ad7830a",
-        "type": "telegram command",
-        "z": "c56d6c2de4c28875",
-        "name": "",
-        "command": "/Brillo",
-        "description": "",
-        "registercommand": false,
-        "language": "",
-        "scope": "default",
-        "bot": "e2e809aeef1c8de1",
-        "strict": false,
-        "hasresponse": true,
-        "useregex": false,
-        "removeregexcommand": false,
-        "outputs": 2,
-        "x": 290,
-        "y": 1300,
-        "wires": [
-            [
-                "06c42e41d26f4338",
-                "782245a623ba26ab"
-            ],
-            []
         ]
     },
     {
@@ -1439,7 +1256,7 @@
         "type": "function",
         "z": "c56d6c2de4c28875",
         "name": "Pregunta Brillo",
-        "func": "/*// El mensaje completo de Telegram\nlet message = msg.payload.content;\n\n// Verifica si el mensaje sigue el formato '/brillo [número]'\nlet match = message.match(/^\\/brillo (\\d+)$/);\n\nif (match) {\n    // Extrae el número (por ejemplo, \"75\")\n    let brillo = parseInt(match[1], 10);\n    \n    // Envía el valor a la salida\n    msg.payload = { brillo: brillo };\n    if(msg.payload>=0 && msg.payload<=100){\n        return msg;\n    }else {\n    // Si no hay un número, ignora el mensaje\n    return null;\n    }\n} else {\n    // Si no hay un número, ignora el mensaje\n    return null;\n}*/\n\n/*let message = msg.payload.content;\n// Verifica si el mensaje sigue el formato '/brillo [número]'\nlet match = message.match(/^\\/brillo (\\d+)$/);\n// Extrae el número (por ejemplo, \"75\")\n    let brillo = parseInt(match[1], 10);\n    \n    // Envía el valor a la salida\n    msg.payload = { brillo: brillo };\n    return msg;*/\n\n    // El mensaje completo de Telegram\nlet message = msg.payload.content;\n\n// Verifica si el mensaje empieza con '/brillo'\nif (message.startsWith('/brillo')) {\n    // Divide el mensaje en partes usando un espacio como separador\n    let parts = message.split(' ');\n\n    // Asegúrate de que hay una segunda parte y que es un número\n    if (parts.length > 1 && !isNaN(parts[1])) {\n        let brillo = parseInt(parts[1], 10);\n\n        // Envía el número a la salida\n        msg.payload = { brillo: brillo };\n        return msg;\n    }\n}\n\n// Si no se cumple la condición, descarta el mensaje\nreturn null;\n",
+        "func": "let message = msg.payload.content;\nlet value = message.substring(1);\nlet brightness = parseInt(value, 10);\n\nmsg.payload = brightness;\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -1464,7 +1281,7 @@
         "links": [
             "759db0777e841359"
         ],
-        "x": 615,
+        "x": 605,
         "y": 1300,
         "wires": []
     },
@@ -1477,7 +1294,7 @@
         "links": [
             "5b5a51e7f7ba48ae"
         ],
-        "x": 735,
+        "x": 815,
         "y": 520,
         "wires": [
             [
@@ -1507,7 +1324,7 @@
         "topic": "",
         "payload": "25",
         "payloadType": "num",
-        "x": 920,
+        "x": 810,
         "y": 580,
         "wires": [
             [
@@ -1520,7 +1337,7 @@
         "type": "debug",
         "z": "c56d6c2de4c28875",
         "name": "debug 77",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1536,7 +1353,7 @@
         "type": "debug",
         "z": "c56d6c2de4c28875",
         "name": "debug 78",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1708,6 +1525,205 @@
         "wires": [
             [
                 "a2b5e6b77e01b75a"
+            ]
+        ]
+    },
+    {
+        "id": "cba8f1c3a77385f6",
+        "type": "telegram receiver",
+        "z": "c56d6c2de4c28875",
+        "name": "",
+        "bot": "e2e809aeef1c8de1",
+        "saveDataDir": "",
+        "filterCommands": true,
+        "x": 250,
+        "y": 1020,
+        "wires": [
+            [
+                "41fa040bbda5a648"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "85957080b7bd9c7d",
+        "type": "telegram command",
+        "z": "c56d6c2de4c28875",
+        "name": "",
+        "command": "/start",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "e2e809aeef1c8de1",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 290,
+        "y": 1060,
+        "wires": [
+            [
+                "41fa040bbda5a648",
+                "f0e1fbba0a87f739"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "28b9876cfbbb8399",
+        "type": "telegram command",
+        "z": "c56d6c2de4c28875",
+        "name": "",
+        "command": "/Apaga_LED",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "e2e809aeef1c8de1",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 270,
+        "y": 1140,
+        "wires": [
+            [
+                "ed748bef99cea673"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "786f83de1cece149",
+        "type": "telegram command",
+        "z": "c56d6c2de4c28875",
+        "name": "",
+        "command": "/Enciende_LED",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "e2e809aeef1c8de1",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 260,
+        "y": 1180,
+        "wires": [
+            [
+                "b6bdb14aafab8b0f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "caa65d291ad7830a",
+        "type": "telegram command",
+        "z": "c56d6c2de4c28875",
+        "name": "",
+        "command": "/Brillo",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "e2e809aeef1c8de1",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 290,
+        "y": 1300,
+        "wires": [
+            [
+                "06c42e41d26f4338",
+                "782245a623ba26ab"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "37d52fc1acb14280",
+        "type": "telegram sender",
+        "z": "c56d6c2de4c28875",
+        "name": "",
+        "bot": "e2e809aeef1c8de1",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 750,
+        "y": 1060,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9c80147a065aa224",
+        "type": "telegram sender",
+        "z": "c56d6c2de4c28875",
+        "name": "LED On/Off",
+        "bot": "e2e809aeef1c8de1",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 730,
+        "y": 1160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c2dc9c526f63f3ec",
+        "type": "function",
+        "z": "c56d6c2de4c28875",
+        "g": "16fded412834b3bb",
+        "name": "save Color data",
+        "func": "let hexColor = msg.payload;\n\nlet r = parseInt(hexColor.substring(0, 2), 16);\nlet g = parseInt(hexColor.substring(2, 4), 16);\nlet b = parseInt(hexColor.substring(4, 6), 16);\n\nflow.set(\"R\", r);\nflow.set(\"G\", g);\nflow.set(\"B\", b);\n\n// read rgb values\nmsg.payload = {\n    \"R\": flow.get(\"R\"),\n    \"G\": flow.get(\"G\"),\n    \"B\": flow.get(\"B\")\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 580,
+        "wires": [
+            [
+                "4c0d83eaf2ebf96b"
+            ]
+        ]
+    },
+    {
+        "id": "a92e06cc50cde2e1",
+        "type": "link out",
+        "z": "c56d6c2de4c28875",
+        "g": "7a2c141ec0ba1873",
+        "name": "switch message",
+        "mode": "link",
+        "links": [
+            "97050e68396087d6"
+        ],
+        "x": 1225,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "97050e68396087d6",
+        "type": "link in",
+        "z": "c56d6c2de4c28875",
+        "g": "16fded412834b3bb",
+        "name": "link in 1",
+        "links": [
+            "a92e06cc50cde2e1"
+        ],
+        "x": 245,
+        "y": 500,
+        "wires": [
+            [
+                "8a83848f4ef7a0e2"
             ]
         ]
     },
