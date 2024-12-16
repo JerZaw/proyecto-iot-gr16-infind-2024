@@ -9,7 +9,4 @@ token para el bot de telegram:
 
 what's left for sure:
 NODE-RED:
-- config message
-- OTA message
-- mongodb
-- ?????
+- Telegram as origin for brightness message - change in both nodered and arduino?
