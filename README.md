@@ -10,3 +10,4 @@ token para el bot de telegram:
 what's left for sure:
 NODE-RED:
 - Telegram as origin for brightness message - change in both nodered and arduino?
+- log in mongodb, lacks funcionality to save as a .csv file
