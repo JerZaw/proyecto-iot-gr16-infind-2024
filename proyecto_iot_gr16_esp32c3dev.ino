@@ -50,11 +50,13 @@ String topic_color_set;
 String topic_switch_get;
 String topic_switch_set;
 String topic_fota;
+String topic_log;
 
 
 //other CONST data
 #define PIN_DHT 4
 #define BUTTON_PIN  9
+#define PIN_ON_OFF 5
 
 
 //state variables
@@ -64,13 +66,13 @@ unsigned long uptime;
 
 //VARIABLES FROM */config
 int sendDataPeriod = 3*60; //period of sending */datos in seconds
-int checkUpdatePeriod = 0; //period of checking OTA in seconds -- if=0, then no periodic check
+int checkUpdatePeriod = 0; //period of checking OTA in minutes -- if=0, then no periodic check
 int LEDChangePeriod = 10; //period of changing ±1% in LED Brightness, in miliseconds
-bool LEDOn = true; //LED state interruptor - onn/off (GPIO5) -- same also in */switch/cmd?
+bool ControllablePin = true; //LED state interruptor - onn/off (GPIO5)
 
 //VARIABLES FROM */switch/cmd
 int LEDOnID;
-// bool LEDOn = true; duplicated?
+bool LEDOn = true;
 
 //VARIABLES FROM */led/brillo
 int aimLEDBrightness = 10; //wanted LED brightness, in range 0-100
@@ -100,21 +102,21 @@ unsigned long last_FOTA_period = 0;
 //-----------------------------------------------------
 // funciones para progreso de OTA
 //-----------------------------------------------------
-void inicio_OTA(){ Serial.println(DEBUG_STRING+"Nuevo Firmware encontrado. Actualizando..."); }
-void final_OTA() { Serial.println(DEBUG_STRING+"Fin OTA. Reiniciando..."); }
-void error_OTA(int e){ Serial.println(DEBUG_STRING+"ERROR OTA: "+String(e)+" "+httpUpdate.getLastErrorString()); }
+void inicio_OTA(){ serial_logln(DEBUG_STRING+"Nuevo Firmware encontrado. Actualizando..."); }
+void final_OTA() { serial_logln(DEBUG_STRING+"Fin OTA. Reiniciando..."); }
+void error_OTA(int e){ serial_logln(DEBUG_STRING+"ERROR OTA: "+String(e)+" "+httpUpdate.getLastErrorString()); }
 void progreso_OTA(int x, int todo){
   int progreso=(int)((x*100)/todo);
   String espacio = (progreso<10)? "  ":(progreso<100)? " " : "";
-  if(progreso%10==0) Serial.println(DEBUG_STRING+"Progreso: "+espacio+String(progreso)+"% - "+String(x/1024)+"K de "+String(todo/1024)+"K");
+  if(progreso%10==0) serial_logln(DEBUG_STRING+"Progreso: "+espacio+String(progreso)+"% - "+String(x/1024)+"K de "+String(todo/1024)+"K");
 }
 //-----------------------------------------------------
 void intenta_OTA(){ 
-  Serial.println( "---------------------------------------------" );  
-  Serial.print  ( DEBUG_STRING+"MAC de la placa: "); Serial.println(WiFi.macAddress());
-  Serial.println( DEBUG_STRING+"Comprobando actualización:" );
-  Serial.println( DEBUG_STRING+"URL: "+OTA_URL );
-  Serial.println( "---------------------------------------------" );  
+  serial_logln( "---------------------------------------------" );  
+  serial_logln( DEBUG_STRING+"MAC de la placa: " + WiFi.macAddress());
+  serial_logln( DEBUG_STRING+"Comprobando actualización:" );
+  serial_logln( DEBUG_STRING+"URL: "+OTA_URL );
+  serial_logln( "---------------------------------------------" );  
   httpUpdate.setLedPin(RGB_BUILTIN);
   httpUpdate.onStart(inicio_OTA);
   httpUpdate.onError(error_OTA);
@@ -125,13 +127,13 @@ void intenta_OTA(){
 
   switch(httpUpdate.update(wClient, OTA_URL, HTTP_OTA_VERSION)) {
     case HTTP_UPDATE_FAILED:
-      Serial.println(DEBUG_STRING+"HTTP update failed: Error ("+String(httpUpdate.getLastError())+"): "+httpUpdate.getLastErrorString());
+      serial_logln(DEBUG_STRING+"HTTP update failed: Error ("+String(httpUpdate.getLastError())+"): "+httpUpdate.getLastErrorString());
       break;
     case HTTP_UPDATE_NO_UPDATES:
-      Serial.println(DEBUG_STRING+"El dispositivo ya está actualizado");
+      serial_logln(DEBUG_STRING+"El dispositivo ya está actualizado");
       break;
     case HTTP_UPDATE_OK:
-      Serial.println(DEBUG_STRING+"OK");
+      serial_logln(DEBUG_STRING+"OK");
       break;
     }
 }
@@ -139,20 +141,25 @@ void intenta_OTA(){
 //-----------------------------------------------------
 
 
+//LOG AND SERIAL
+void serial_logln(String message){
+  Serial.println(message);
+  mqtt_client.publish(topic_log.c_str(), message.c_str());
+}
+
 
 //WIFI connection
 void connect_wifi() {
-  Serial.println("Connecting to " + ssid);
+  serial_logln("Connecting to " + ssid);
  
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(200);
-    Serial.print(".");
+    serial_logln(".");
   }
-  Serial.println();
-  Serial.println("WiFi connected, IP address: " + WiFi.localIP().toString());
+  serial_logln("WiFi connected, IP address: " + WiFi.localIP().toString());
 }
 
 
@@ -162,22 +169,21 @@ void connect_wifi() {
 //sends mqtt message
 void publish_mqtt_message(String topic, String body, bool isRetained = false){
   //TODO: CHECK IF "IF" AND RETAINED MSG WORKS
+  String messageStart;
   if(isRetained)
   {
     char buffer[256];
     body.toCharArray(buffer, 256);
 
     mqtt_client.publish(topic.c_str(), (const uint8_t*)buffer , body.length(), isRetained);
-    Serial.print("RETAINED Message sent to [");
+    messageStart = "RETAINED Message sent to [";
   }
   else
   {
     mqtt_client.publish(topic.c_str(), body.c_str());
-    Serial.print("Message sent to [");
+    messageStart = "Message sent to [";
   }
-  Serial.print(topic);
-  Serial.print("]: ");
-  Serial.println(body);
+  serial_logln(messageStart + topic + "]: " + body);
 }
 
 //MQTT connection
@@ -188,9 +194,9 @@ void connect_mqtt() {
   int willQoS = 1;  // QoS del message de LWT (nivel de calidad)
   bool willRetain = true; 
   while (!mqtt_client.connected()) {
-    Serial.print("Intentando connectr a MQTT...");
+    serial_logln("Intentando connectr a MQTT...");
     if (mqtt_client.connect(ID_PLACA.c_str(), user.c_str(), pass.c_str(),willTopic.c_str(),willQoS,willRetain,willMessage.c_str())) {
-      Serial.println(" connectdo a broker: " + server);
+      serial_logln(" connectdo a broker: " + server);
       mqtt_client.subscribe(topic_config.c_str());
       mqtt_client.subscribe(topic_brightness_get.c_str());
       mqtt_client.subscribe(topic_color_get.c_str());
@@ -200,7 +206,7 @@ void connect_mqtt() {
       publish_mqtt_message(topic_connection, mqtt_connection_body(true), true);
 
     } else {
-      Serial.println("ERROR:"+ String(mqtt_client.state()) +" reintento en 5s" );
+      serial_logln("ERROR:"+ String(mqtt_client.state()) +" reintento en 5s" );
       // Wait 5 seconds before retrying
       delay(5000);
     }
@@ -294,7 +300,7 @@ void process_mqtt_config(char* message){
   StaticJsonDocument<200> body;
   DeserializationError error = deserializeJson(body, message);
   if (error) {
-    Serial.println("Error al deserializar el JSON");
+    serial_logln("Error al deserializar el JSON");
     return;
   }
 
@@ -303,7 +309,18 @@ void process_mqtt_config(char* message){
   sendDataPeriod = !body["envia"].isNull() ? body["envia"] : sendDataPeriod;
   checkUpdatePeriod = !body["actualiza"].isNull() ? body["actualiza"] : checkUpdatePeriod;
   LEDChangePeriod = !body["velocidad"].isNull() ? body["velocidad"] : LEDChangePeriod;
-  LEDOn = !body["SWITCH"].isNull() ? body["SWITCH"] : LEDOn;
+  ControllablePin = !body["SWITCH"].isNull() ? body["SWITCH"] : ControllablePin;
+
+  if(ControllablePin)
+  {
+    digitalWrite(PIN_ON_OFF, HIGH);
+  }
+  else {
+    digitalWrite(PIN_ON_OFF, LOW);
+  }
+ 
+
+  
 }
 
 void process_mqtt_brightness(char* message){
@@ -311,7 +328,7 @@ void process_mqtt_brightness(char* message){
   StaticJsonDocument<200> body;
   DeserializationError error = deserializeJson(body, message);
   if (error) {
-    Serial.println("Error al deserializar el JSON");
+    serial_logln("Error al deserializar el JSON");
     return;
   }
 
@@ -323,6 +340,7 @@ void process_mqtt_brightness(char* message){
   aimLEDBrightness = body["level"];
   LEDBrightnessID = !body["id"].isNull() ? body["id"] : 0;
   LEDBrightnessOrigin = "mqtt";
+  //LEDBrightnessOrigin = body["origin"];
 }
 
 void process_mqtt_color(char* message){
@@ -330,7 +348,7 @@ void process_mqtt_color(char* message){
   StaticJsonDocument<200> body;
   DeserializationError error = deserializeJson(body, message);
   if (error) {
-    Serial.println("Error al deserializar el JSON");
+    serial_logln("Error al deserializar el JSON");
     return;
   }
 
@@ -352,7 +370,7 @@ void process_mqtt_switch(char* message){
   StaticJsonDocument<200> body;
   DeserializationError error = deserializeJson(body, message);
   if (error) {
-    Serial.println("Error al deserializar el JSON");
+    serial_logln("Error al deserializar el JSON");
     return;
   }
 
@@ -375,16 +393,14 @@ void process_mqtt_fota(){
 
 //process mqtt message
 void process_msg(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message received from [");
-  Serial.print(topic);
-  Serial.print("]: ");
+  serial_logln("Message received from [" + String(topic) + "]: ");
   
   // Convertir el payload a un string
   char message[length + 1];
   strncpy(message, (char*)payload, length);
   message[length] = '\0'; 
 
-  Serial.println(message);
+  serial_logln(message);
 
   // Process JSON accordingly to the topic
   if (topic == topic_config) {
@@ -405,8 +421,7 @@ void process_msg(char* topic, byte* payload, unsigned int length) {
 }
 
 void bad_message(){
-  Serial.print("[ERROR]: ");
-  Serial.println("Some required in received message is null!");
+  serial_logln(String("[ERROR]: ") + "Some required in received message is null!");
 }
 
 //-----------------------------------------------------
@@ -497,7 +512,7 @@ void measureSendData(unsigned long ahoraArg){ //get measures and send the data
 // FOTA UPDATE PERIOD
 //-----------------------------------------------------
 void FOTAperiod(unsigned long ahoraArg){ //get measures and send the data
-  if ((ahoraArg - last_FOTA_period >= checkUpdatePeriod * 1000) && (checkUpdatePeriod != 0)) { //every X minutes
+  if ((ahoraArg - last_FOTA_period >= checkUpdatePeriod * 60 * 1000) && (checkUpdatePeriod != 0)) { //every X minutes
     last_FOTA_period = ahoraArg;
     intenta_OTA();
   }
@@ -521,24 +536,24 @@ void singleClick(Button2& btn) {
     LEDOn=false;
   }
   publish_mqtt_message(topic_switch_set, mqtt_switch_body());
-  Serial.println("click\n");
+  serial_logln("click\n");
 }
 /*void longClickDetected(Button2& btn) {
-    Serial.println("long click detected");
+    serial_logln("long click detected");
 }*/
 void longClick(Button2& btn) {
     intenta_OTA();
 
-    Serial.println("long click\n");
+    serial_logln("long click\n");
 }
 void doubleClick(Button2& btn) {
     aimLEDBrightness = 100;
     LEDBrightnessOrigin = "pulsador";
 
-    Serial.println("double click\n");
+    serial_logln("double click\n");
 }
 /*void tripleClick(Button2& btn) {
-    Serial.println("triple click\n");
+    serial_logln("triple click\n");
 }*/
 //-----------------------------------------------------
 //-----------------------------------------------------
@@ -554,7 +569,7 @@ void setupWiFi(){
   ID_PLACA="ESP_" + String( chipId );
   connect_wifi();
   CHIPID= WiFi.getHostname();
-  Serial.println("CHIPID: "+ CHIPID);
+  serial_logln("CHIPID: "+ CHIPID);
 }
 
 void setupMqtt(){
@@ -569,6 +584,7 @@ void setupMqtt(){
   topic_switch_get = "II16/" + CHIPID +"/switch/cmd";
   topic_switch_set = "II16/" + CHIPID +"/switch/status";
   topic_fota = "II16/" + CHIPID +"/FOTA";
+  topic_log = "II16/" + CHIPID +"/log";
   mqtt_client.setServer(server.c_str(), 1883);
   mqtt_client.setBufferSize(512); // para poder enviar messages de hasta X bytes
   mqtt_client.setCallback(process_msg);
@@ -585,11 +601,15 @@ void setupButton(){
   pinMode(BUTTON_PIN , INPUT_PULLUP);
 }
 
+void setupControllablePin(){
+  pinMode(PIN_ON_OFF, OUTPUT);
+}
+
 
 void setup() { // put your setup code here, to run once:
   Serial.begin(115200);
-  Serial.println();
-  Serial.println("Start setup...");
+  serial_logln("");
+  serial_logln("Start setup...");
 
   //set up WiFi connection and de
   setupWiFi();
@@ -606,7 +626,9 @@ void setup() { // put your setup code here, to run once:
   //setup BUTTON MANAGEMENT
   setupButton();
 
-  Serial.println("Setup finished in " +  String(millis()) + " ms");
+  setupControllablePin();
+
+  serial_logln("Setup finished in " +  String(millis()) + " ms");
 }      
 
 
