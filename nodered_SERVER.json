@@ -317,9 +317,9 @@
             "b28309d73fbcbc06",
             "2246a568a9da1291"
         ],
-        "x": 114,
+        "x": 94,
         "y": 1459,
-        "w": 692,
+        "w": 732,
         "h": 82
     },
     {
@@ -860,10 +860,10 @@
         "z": "e92da6dab713fbf2",
         "g": "0ece979cdefda2e6",
         "group": "9cb3afe23639a28c",
-        "order": 2,
+        "order": 3,
         "width": 0,
         "height": 0,
-        "name": "",
+        "name": "Termometro",
         "title": "Temperatura",
         "numColor": 3,
         "colorTop": "#2196f3",
@@ -887,7 +887,7 @@
         "g": "0ece979cdefda2e6",
         "name": "",
         "group": "9cb3afe23639a28c",
-        "order": 0,
+        "order": 4,
         "width": 0,
         "height": 0,
         "gtype": "gage",
@@ -916,7 +916,7 @@
         "g": "0ece979cdefda2e6",
         "name": "",
         "group": "9cb3afe23639a28c",
-        "order": 1,
+        "order": 2,
         "width": 0,
         "height": 0,
         "label": "",
@@ -2766,7 +2766,7 @@
         "topic": "",
         "payload": "{ }",
         "payloadType": "json",
-        "x": 250,
+        "x": 230,
         "y": 1500,
         "wires": [
             [
@@ -2804,7 +2804,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 700,
+        "x": 720,
         "y": 1500,
         "wires": []
     },
@@ -2872,6 +2872,160 @@
         ]
     },
     {
+        "id": "4ff1933ec36c9ea1",
+        "type": "csv",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\r\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 910,
+        "y": 60,
+        "wires": [
+            [
+                "5badb65f4568477f",
+                "fea0420843ce7208"
+            ]
+        ]
+    },
+    {
+        "id": "5badb65f4568477f",
+        "type": "file",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "filename": "C:\\Users\\Roberto\\Downloads\\DatosTemp.csv",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1190,
+        "y": 60,
+        "wires": [
+            [
+                "d6c2470eb56a7fb3"
+            ]
+        ]
+    },
+    {
+        "id": "b232fafbcd92818f",
+        "type": "mongodb in",
+        "z": "e92da6dab713fbf2",
+        "mongodb": "ef32da8a5b070e31",
+        "name": "",
+        "collection": "datos_json",
+        "operation": "find",
+        "x": 690,
+        "y": 60,
+        "wires": [
+            [
+                "4ff1933ec36c9ea1",
+                "c6379ec4a869ee14"
+            ]
+        ]
+    },
+    {
+        "id": "0e3cdd960c1e1aab",
+        "type": "ui_button",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "group": "9cb3afe23639a28c",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Descargar Datos",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{ }",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 430,
+        "y": 60,
+        "wires": [
+            [
+                "6e1ccc4d4d64f4e9",
+                "b232fafbcd92818f"
+            ]
+        ]
+    },
+    {
+        "id": "6e1ccc4d4d64f4e9",
+        "type": "debug",
+        "z": "e92da6dab713fbf2",
+        "name": "debug 84",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "c6379ec4a869ee14",
+        "type": "debug",
+        "z": "e92da6dab713fbf2",
+        "name": "debug 85",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "fea0420843ce7208",
+        "type": "debug",
+        "z": "e92da6dab713fbf2",
+        "name": "debug 86",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1120,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "d6c2470eb56a7fb3",
+        "type": "debug",
+        "z": "e92da6dab713fbf2",
+        "name": "debug 87",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1460,
+        "y": 60,
+        "wires": []
+    },
+    {
         "id": "dcc291bb801e1410",
         "type": "mqtt-broker",
         "name": "",
@@ -2907,7 +3061,7 @@
         "type": "ui_group",
         "name": "LEDs",
         "tab": "886291c5904a2cf6",
-        "order": 2,
+        "order": 1,
         "disp": true,
         "width": "6",
         "collapse": false,
@@ -2918,7 +3072,7 @@
         "type": "ui_group",
         "name": "Datos",
         "tab": "886291c5904a2cf6",
-        "order": 3,
+        "order": 2,
         "disp": true,
         "width": "6",
         "collapse": false,
@@ -2950,7 +3104,7 @@
         "type": "ui_group",
         "name": "Historial de datos",
         "tab": "886291c5904a2cf6",
-        "order": 5,
+        "order": 3,
         "disp": true,
         "width": "6",
         "collapse": false,
@@ -2961,7 +3115,7 @@
         "type": "ui_group",
         "name": "Cofiguracion",
         "tab": "886291c5904a2cf6",
-        "order": 1,
+        "order": 5,
         "disp": true,
         "width": "6",
         "collapse": false,
