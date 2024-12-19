@@ -71,8 +71,6 @@
             "970bbf3c5d96c8f7",
             "0c64375291e4bbb3",
             "a46586af39594a38",
-            "49142ca53f693d7a",
-            "dbd569a86613854b",
             "354299ab6f563dee",
             "8a2ae27eef722c93",
             "4fb42311617ab506",
@@ -328,7 +326,7 @@
         "z": "e92da6dab713fbf2",
         "g": "cdddb9ef78df682b",
         "name": "LED Brillo Pub",
-        "topic": "II16/esp32c3-D85054/led/brillo/estado",
+        "topic": "II16/esp32c3-D9D878/led/brillo/estado",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -351,7 +349,7 @@
         "z": "e92da6dab713fbf2",
         "g": "5bbfe1f32a8dd3da",
         "name": "LED Color Pub",
-        "topic": "II16/esp32c3-D85054/led/color/estado",
+        "topic": "II16/esp32c3-D9D878/led/color/estado",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -374,7 +372,7 @@
         "z": "e92da6dab713fbf2",
         "g": "cdddb9ef78df682b",
         "name": "LED Brillo Sub",
-        "topic": "II16/esp32c3-D85054/led/brillo",
+        "topic": "II16/esp32c3-D9D878/led/brillo",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -393,7 +391,7 @@
         "z": "e92da6dab713fbf2",
         "g": "5bbfe1f32a8dd3da",
         "name": "LED Color Sub",
-        "topic": "II16/esp32c3-D85054/led/color",
+        "topic": "II16/esp32c3-D9D878/led/color",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -412,7 +410,7 @@
         "z": "e92da6dab713fbf2",
         "g": "48918301713603ee",
         "name": "Conexion",
-        "topic": "II16/esp32c3-D85054/conexion",
+        "topic": "II16/esp32c3-D9D878/conexion",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -437,7 +435,7 @@
         "z": "e92da6dab713fbf2",
         "g": "48918301713603ee",
         "name": "Conexion",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -490,7 +488,7 @@
         "type": "ui_led",
         "z": "e92da6dab713fbf2",
         "g": "5bbfe1f32a8dd3da",
-        "order": 4,
+        "order": 3,
         "group": "9e8a9cec0b15cf59",
         "width": 0,
         "height": 0,
@@ -638,9 +636,9 @@
         "z": "e92da6dab713fbf2",
         "g": "cdddb9ef78df682b",
         "group": "9e8a9cec0b15cf59",
-        "order": 6,
-        "width": "0",
-        "height": "0",
+        "order": 5,
+        "width": 0,
+        "height": 0,
         "name": "",
         "label": "Brillo LED",
         "format": "{{msg.payload}}",
@@ -672,7 +670,7 @@
         "showLightness": true,
         "square": "false",
         "dynOutput": "false",
-        "order": 3,
+        "order": 2,
         "width": 0,
         "height": 0,
         "passthru": true,
@@ -696,7 +694,7 @@
         "label": "% Brillo",
         "tooltip": "",
         "group": "9e8a9cec0b15cf59",
-        "order": 5,
+        "order": 4,
         "width": 0,
         "height": 0,
         "passthru": true,
@@ -739,7 +737,7 @@
         "z": "e92da6dab713fbf2",
         "g": "0ece979cdefda2e6",
         "name": "Datos",
-        "topic": "II16/esp32c3-D85054/datos",
+        "topic": "II16/esp32c3-D9D878/datos",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -860,7 +858,7 @@
         "z": "e92da6dab713fbf2",
         "g": "0ece979cdefda2e6",
         "group": "9cb3afe23639a28c",
-        "order": 3,
+        "order": 6,
         "width": 0,
         "height": 0,
         "name": "Termometro",
@@ -887,7 +885,7 @@
         "g": "0ece979cdefda2e6",
         "name": "",
         "group": "9cb3afe23639a28c",
-        "order": 4,
+        "order": 8,
         "width": 0,
         "height": 0,
         "gtype": "gage",
@@ -916,7 +914,7 @@
         "g": "0ece979cdefda2e6",
         "name": "",
         "group": "9cb3afe23639a28c",
-        "order": 2,
+        "order": 4,
         "width": 0,
         "height": 0,
         "label": "",
@@ -1074,7 +1072,7 @@
         "z": "e92da6dab713fbf2",
         "g": "cbbc0d998969e22c",
         "name": "Switch Sub",
-        "topic": "II16/esp32c3-D85054/switch/cmd",
+        "topic": "II16/esp32c3-D9D878/switch/cmd",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -1093,7 +1091,7 @@
         "z": "e92da6dab713fbf2",
         "g": "cbbc0d998969e22c",
         "name": "Switch Pub",
-        "topic": "II16/esp32c3-D85054/switch/status",
+        "topic": "II16/esp32c3-D9D878/switch/status",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -1105,7 +1103,6 @@
         "y": 1080,
         "wires": [
             [
-                "49142ca53f693d7a",
                 "8a2ae27eef722c93",
                 "4fb42311617ab506"
             ]
@@ -1117,7 +1114,7 @@
         "z": "e92da6dab713fbf2",
         "g": "a0d92a043d54fb76",
         "name": "FOTA",
-        "topic": "II16/esp32c3-D85054/FOTA",
+        "topic": "II16/esp32c3-D9D878/FOTA",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -1136,7 +1133,7 @@
         "z": "e92da6dab713fbf2",
         "g": "a0d92a043d54fb76",
         "name": "Config",
-        "topic": "II16/esp32c3-D85054/config",
+        "topic": "II16/esp32c3-D9D878/config",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -1158,7 +1155,7 @@
         "label": "Switch",
         "tooltip": "",
         "group": "9e8a9cec0b15cf59",
-        "order": 2,
+        "order": 1,
         "width": 0,
         "height": 0,
         "passthru": false,
@@ -1184,50 +1181,6 @@
                 "ae65e9726ba02940"
             ]
         ]
-    },
-    {
-        "id": "49142ca53f693d7a",
-        "type": "function",
-        "z": "e92da6dab713fbf2",
-        "g": "cbbc0d998969e22c",
-        "name": "function 6",
-        "func": "// Extraer el valor del interruptor desde el mensaje recibido\nlet switchValue = msg.payload.SWITCH;\n\n// Validar que el campo SWITCH existe\nif (switchValue === undefined) {\n    node.error(\"El mensaje no contiene el campo SWITCH.\");\n    return null;\n}\n\n// Construir el mensaje de texto\nmsg.payload = `La configuración del interruptor es ${switchValue}`;\n\n// Devolver el mensaje para el siguiente nodo\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1240,
-        "y": 1080,
-        "wires": [
-            [
-                "dbd569a86613854b"
-            ]
-        ]
-    },
-    {
-        "id": "dbd569a86613854b",
-        "type": "ui_text",
-        "z": "e92da6dab713fbf2",
-        "d": true,
-        "g": "cbbc0d998969e22c",
-        "group": "9e8a9cec0b15cf59",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "name": "",
-        "label": "",
-        "format": "{{msg.payload}}",
-        "layout": "row-spread",
-        "className": "",
-        "style": false,
-        "font": "",
-        "fontSize": 16,
-        "color": "#000000",
-        "x": 1390,
-        "y": 1080,
-        "wires": []
     },
     {
         "id": "a36432f02d5c61d7",
@@ -1271,7 +1224,7 @@
         "z": "e92da6dab713fbf2",
         "g": "0ece979cdefda2e6",
         "name": "Datos",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1589,7 +1542,7 @@
         "z": "e92da6dab713fbf2",
         "g": "709683779bfc6b4a",
         "name": "Datos",
-        "topic": "II16/esp32c3-D85054/datos",
+        "topic": "II16/esp32c3-D9D878/datos",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -1736,7 +1689,7 @@
         "z": "e92da6dab713fbf2",
         "g": "709683779bfc6b4a",
         "name": "",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1752,9 +1705,9 @@
         "g": "709683779bfc6b4a",
         "group": "b5a6df43101c1b3d",
         "name": "",
-        "order": 3,
-        "width": "6",
-        "height": "10",
+        "order": 4,
+        "width": 6,
+        "height": 10,
         "columns": [
             {
                 "field": "date",
@@ -1802,7 +1755,7 @@
         "label": "Nº de datos",
         "tooltip": "",
         "group": "b5a6df43101c1b3d",
-        "order": 2,
+        "order": 3,
         "width": 0,
         "height": 0,
         "passthru": true,
@@ -1858,7 +1811,7 @@
         "label": "Temperatura de corte",
         "tooltip": "",
         "group": "b5a6df43101c1b3d",
-        "order": 1,
+        "order": 2,
         "width": 0,
         "height": 0,
         "wrap": false,
@@ -1973,7 +1926,7 @@
         "name": "nuevo id de la placa: D85054",
         "info": "",
         "x": 160,
-        "y": 60,
+        "y": 40,
         "wires": []
     },
     {
@@ -1985,7 +1938,7 @@
         "label": "Velocidad de envio de mensjaes (s)",
         "tooltip": "",
         "group": "ba0cb1f8909d0360",
-        "order": 0,
+        "order": 1,
         "width": 0,
         "height": 0,
         "passthru": true,
@@ -2064,7 +2017,7 @@
         "label": "Comprueba Fota (min)",
         "tooltip": "",
         "group": "ba0cb1f8909d0360",
-        "order": 0,
+        "order": 2,
         "width": 0,
         "height": 0,
         "passthru": true,
@@ -2092,7 +2045,7 @@
         "label": "Velocidad RGB (ms para 1%)",
         "tooltip": "",
         "group": "ba0cb1f8909d0360",
-        "order": 0,
+        "order": 3,
         "width": 0,
         "height": 0,
         "passthru": true,
@@ -2117,7 +2070,7 @@
         "z": "e92da6dab713fbf2",
         "g": "a0d92a043d54fb76",
         "name": "debug 81",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2193,7 +2146,7 @@
         "label": "SWITCH GPIO5",
         "tooltip": "",
         "group": "ba0cb1f8909d0360",
-        "order": 3,
+        "order": 4,
         "width": 0,
         "height": 0,
         "passthru": true,
@@ -2301,7 +2254,7 @@
         "z": "e92da6dab713fbf2",
         "g": "409e01c1ddaa3548",
         "name": "debug 82",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2318,7 +2271,7 @@
         "z": "e92da6dab713fbf2",
         "g": "409e01c1ddaa3548",
         "name": "+ fecha",
-        "func": "msg.payload.date = new Date();\nreturn msg;",
+        "func": "msg.date = new Date();\nmsg.payload = \"[\" + msg.date.toString() + \"]: \" + msg.payload;\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -2355,7 +2308,7 @@
         "z": "e92da6dab713fbf2",
         "g": "409e01c1ddaa3548",
         "name": "Log",
-        "topic": "II16/esp32c3-D85054/log",
+        "topic": "II16/esp32c3-D9D878/log",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -2872,132 +2825,510 @@
         ]
     },
     {
-        "id": "4ff1933ec36c9ea1",
+        "id": "5dade93b4dcf8a6c",
+        "type": "comment",
+        "z": "e92da6dab713fbf2",
+        "name": "Otro posible id marcado: D9D878",
+        "info": "",
+        "x": 170,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "b3fc61600eb04992",
         "type": "csv",
         "z": "e92da6dab713fbf2",
         "name": "",
-        "spec": "rfc",
-        "sep": ",",
-        "hdrin": true,
-        "hdrout": "once",
+        "sep": ";",
+        "hdrin": "",
+        "hdrout": "all",
         "multi": "one",
         "ret": "\\r\\n",
-        "temp": "",
-        "skip": "0",
+        "temp": "date, temperatura, humedad",
+        "skip": 0,
         "strings": true,
-        "include_empty_strings": "",
-        "include_null_values": "",
-        "x": 910,
-        "y": 60,
+        "include_empty_strings": false,
+        "include_null_values": false,
+        "x": 1690,
+        "y": 360,
         "wires": [
             [
-                "5badb65f4568477f",
-                "fea0420843ce7208"
+                "8a13cf0ccf3c9948"
             ]
         ]
     },
     {
-        "id": "5badb65f4568477f",
-        "type": "file",
+        "id": "20981fc6c8067dbd",
+        "type": "http response",
         "z": "e92da6dab713fbf2",
         "name": "",
-        "filename": "\\Users\\Roberto\\Desktop\\DatosTemp.csv",
-        "filenameType": "str",
-        "appendNewline": false,
-        "createDir": true,
-        "overwriteFile": "false",
-        "encoding": "none",
-        "x": 1180,
-        "y": 60,
+        "statusCode": "",
+        "headers": {
+            "Content-Disposition": "attachment; filename=datos.csv"
+        },
+        "x": 1970,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "8a13cf0ccf3c9948",
+        "type": "function",
+        "z": "e92da6dab713fbf2",
+        "name": "Unicode y separador",
+        "func": "//add Unicode BOM character (byte order mark) to make EXCEL knows this is UTF-8\nif(global.get(\"separador_decimal\")==\"punto\")\n{\n    msg.payload='\\ufeff'+msg.payload;\n\n}\nelse\n{\n    msg.payload='\\ufeff'+(msg.payload).replace(/\\./g,\",\");\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1860,
+        "y": 360,
         "wires": [
             [
-                "d6c2470eb56a7fb3"
+                "20981fc6c8067dbd"
             ]
         ]
     },
     {
-        "id": "b232fafbcd92818f",
+        "id": "5c732cde3f63d57e",
+        "type": "http response",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "Content-Disposition": "attachment; filename=registros.csv"
+        },
+        "x": 1170,
+        "y": 1840,
+        "wires": []
+    },
+    {
+        "id": "5f4096e13258aa33",
+        "type": "function",
+        "z": "e92da6dab713fbf2",
+        "name": "Unicode y separador",
+        "func": "//add Unicode BOM character (byte order mark) to make EXCEL knows this is UTF-8\nif(global.get(\"separador_decimal\")==\"punto\")\n{\n    msg.payload='\\ufeff'+msg.payload;\n\n}\nelse\n{\n    msg.payload='\\ufeff'+(msg.payload).replace(/\\./g,\",\");\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 1840,
+        "wires": [
+            [
+                "5c732cde3f63d57e"
+            ]
+        ]
+    },
+    {
+        "id": "87333307d4d557ed",
+        "type": "function",
+        "z": "e92da6dab713fbf2",
+        "name": "consulta",
+        "func": "// fecha por defecto es hoy\nvar ahora = new Date();\n// pillo los globales si los hay, si no la fecha de hoy\nvar desde = new Date(global.get(\"desde\") || ahora);\nvar hasta = new Date(global.get(\"hasta\") || ahora); \n// el día de inicio desde las cero horas\nvar inicio = new Date(desde.getFullYear(),desde.getMonth(),desde.getDate(),0,0,0,0);\n// el día final es hasta final del día\nvar final = new Date(hasta.getFullYear(),hasta.getMonth(),hasta.getDate(),23,59,59,999);\n\nmsg.payload= { };\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 278.000301361084,
+        "y": 1839.9999504089355,
+        "wires": [
+            [
+                "6b8b58983a3c8fe7"
+            ]
+        ]
+    },
+    {
+        "id": "72e12fee204fead7",
+        "type": "http in",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "url": "/registros",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 115.00026321411133,
+        "y": 1839.9999294281006,
+        "wires": [
+            [
+                "87333307d4d557ed"
+            ]
+        ]
+    },
+    {
+        "id": "b50622e3337daf2b",
+        "type": "ui_template",
+        "z": "e92da6dab713fbf2",
+        "group": "9cb3afe23639a28c",
+        "name": "",
+        "order": 7,
+        "width": "0",
+        "height": "0",
+        "format": "<style>\n.button {\n    text-align: center;\n    font: bold 17px Arial;\n    text-decoration: none;\n    background-color: #339966;\n    color: white;\n    padding: 8px 10px;\n    border: 2px solid #CCCCCC;\n  }\n  \n  .button:hover\n  {\n   background-color: #26734d;\n  }\n\n</style>\n<a href=\"/registros\" class=\"button\">Descarga registros en CSV (EXCEL)</a>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": false,
+        "templateScope": "local",
+        "className": "",
+        "x": 134.00028610229492,
+        "y": 1731.9997625350952,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6b8b58983a3c8fe7",
+        "type": "mongodb in",
+        "z": "e92da6dab713fbf2",
+        "mongodb": "ef32da8a5b070e31",
+        "name": "",
+        "collection": "log",
+        "operation": "find",
+        "x": 513.0144844055176,
+        "y": 1840.0056114196777,
+        "wires": [
+            [
+                "07efd2550ab6a4bd"
+            ]
+        ]
+    },
+    {
+        "id": "07efd2550ab6a4bd",
+        "type": "csv",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "all",
+        "multi": "one",
+        "ret": "\\r\\n",
+        "temp": "_id, payload",
+        "skip": 0,
+        "strings": false,
+        "include_empty_strings": true,
+        "include_null_values": true,
+        "x": 770,
+        "y": 1840,
+        "wires": [
+            [
+                "5f4096e13258aa33",
+                "04122b95c1e53789"
+            ]
+        ]
+    },
+    {
+        "id": "b992296514a0b124",
+        "type": "comment",
+        "z": "e92da6dab713fbf2",
+        "name": "Botón en HTML para lanzar descarga de fichero",
+        "info": "",
+        "x": 243.79004287719727,
+        "y": 1684.0822162628174,
+        "wires": []
+    },
+    {
+        "id": "32e83ac15edfc15f",
+        "type": "comment",
+        "z": "e92da6dab713fbf2",
+        "name": "Flujo para descarga de fichero",
+        "info": "",
+        "x": 186.01446914672852,
+        "y": 1782.0055828094482,
+        "wires": []
+    },
+    {
+        "id": "dd73181cc142d625",
+        "type": "ui_date_picker",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "label": "Fecha inicio",
+        "group": "9cb3afe23639a28c",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "topic": "",
+        "topicType": "str",
+        "className": "",
+        "x": 337.9915008544922,
+        "y": 2375.579559803009,
+        "wires": [
+            [
+                "db32310c4b95db0c"
+            ]
+        ]
+    },
+    {
+        "id": "ab90082e913dee70",
+        "type": "ui_date_picker",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "label": "Fecha final",
+        "group": "9cb3afe23639a28c",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "topic": "",
+        "topicType": "str",
+        "className": "",
+        "x": 341.0028533935547,
+        "y": 2424.573797225952,
+        "wires": [
+            [
+                "e047a7198cfafa32"
+            ]
+        ]
+    },
+    {
+        "id": "db32310c4b95db0c",
+        "type": "change",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "desde",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 533.9971771240234,
+        "y": 2374.2414474487305,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e047a7198cfafa32",
+        "type": "change",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "hasta",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 537.2244567871094,
+        "y": 2425.1250019073486,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fa1057dad6d0bf87",
+        "type": "inject",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 2400,
+        "wires": [
+            [
+                "dd73181cc142d625",
+                "ab90082e913dee70"
+            ]
+        ]
+    },
+    {
+        "id": "04122b95c1e53789",
+        "type": "debug",
+        "z": "e92da6dab713fbf2",
+        "name": "debug 88",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 1780,
+        "wires": []
+    },
+    {
+        "id": "e0e7e8b29588cfaf",
+        "type": "http response",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "Content-Disposition": "attachment; filename=datos.csv"
+        },
+        "x": 1150,
+        "y": 2280,
+        "wires": []
+    },
+    {
+        "id": "5a3f9d0759904252",
+        "type": "function",
+        "z": "e92da6dab713fbf2",
+        "name": "Unicode y separador",
+        "func": "//add Unicode BOM character (byte order mark) to make EXCEL knows this is UTF-8\nif(global.get(\"separador_decimal\")==\"punto\")\n{\n    msg.payload='\\ufeff'+msg.payload;\n\n}\nelse\n{\n    msg.payload='\\ufeff'+(msg.payload).replace(/\\./g,\",\");\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 2280,
+        "wires": [
+            [
+                "e0e7e8b29588cfaf"
+            ]
+        ]
+    },
+    {
+        "id": "47f446cf6d834084",
+        "type": "function",
+        "z": "e92da6dab713fbf2",
+        "name": "consulta",
+        "func": "// fecha por defecto es hoy\nvar ahora = new Date();\n// pillo los globales si los hay, si no la fecha de hoy\nvar desde = new Date(global.get(\"desde\") || ahora);\nvar hasta = new Date(global.get(\"hasta\") || ahora); \n// el día de inicio desde las cero horas\nvar inicio = new Date(desde.getFullYear(),desde.getMonth(),desde.getDate(),0,0,0,0);\n// el día final es hasta final del día\nvar final = new Date(hasta.getFullYear(),hasta.getMonth(),hasta.getDate(),23,59,59,999);\n\nmsg.payload=\n[\n    { \"$match\": { \"date\": { \"$gte\": inicio , \"$lte\": final } } },\n    { \"$project\": {\n        \"_id\": 0,\n        \"date\": 1,\n        \"temperatura\": \"$DHT11.temp\",\n        \"humedad\": \"$DHT11.hum\",\n        }\n    },\n    { \"$sort\": {\"date\": 1} }\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 2280,
+        "wires": [
+            [
+                "4a7ec9b9819fe7ab",
+                "a17ddf789a348be8"
+            ]
+        ]
+    },
+    {
+        "id": "89462b02ab1ffbba",
+        "type": "http in",
+        "z": "e92da6dab713fbf2",
+        "name": "",
+        "url": "/datos",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 85.00026321411133,
+        "y": 2279.9999294281006,
+        "wires": [
+            [
+                "47f446cf6d834084"
+            ]
+        ]
+    },
+    {
+        "id": "d9071fb81a915d48",
+        "type": "ui_template",
+        "z": "e92da6dab713fbf2",
+        "group": "9cb3afe23639a28c",
+        "name": "Descarga datos",
+        "order": 1,
+        "width": "0",
+        "height": "0",
+        "format": "<style>\n.button {\n    text-align: center;\n    font: bold 17px Arial;\n    text-decoration: none;\n    background-color: #339966;\n    color: white;\n    padding: 8px 10px;\n    border: 2px solid #CCCCCC;\n  }\n  \n  .button:hover\n  {\n   background-color: #26734d;\n  }\n\n</style>\n<a href=\"/datos\" class=\"button\">Descarga datos en CSV (EXCEL)</a>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": false,
+        "templateScope": "local",
+        "className": "",
+        "x": 134.00028610229492,
+        "y": 2171.999762535095,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4a7ec9b9819fe7ab",
         "type": "mongodb in",
         "z": "e92da6dab713fbf2",
         "mongodb": "ef32da8a5b070e31",
         "name": "",
         "collection": "datos_json",
-        "operation": "find",
-        "x": 690,
-        "y": 60,
+        "operation": "aggregate",
+        "x": 523.0144844055176,
+        "y": 2280.0056114196777,
         "wires": [
             [
-                "4ff1933ec36c9ea1",
-                "c6379ec4a869ee14"
+                "d1d4b1c399fa3605",
+                "1a0ae60eec537243"
             ]
         ]
     },
     {
-        "id": "0e3cdd960c1e1aab",
-        "type": "ui_button",
+        "id": "d1d4b1c399fa3605",
+        "type": "csv",
         "z": "e92da6dab713fbf2",
         "name": "",
-        "group": "9cb3afe23639a28c",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "label": "Descargar Datos",
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "",
-        "payload": "{ }",
-        "payloadType": "json",
-        "topic": "",
-        "topicType": "str",
-        "x": 430,
-        "y": 60,
+        "sep": ";",
+        "hdrin": "",
+        "hdrout": "all",
+        "multi": "one",
+        "ret": "\\r\\n",
+        "temp": "date, temperatura, humedad",
+        "skip": 0,
+        "strings": true,
+        "include_empty_strings": false,
+        "include_null_values": false,
+        "x": 770,
+        "y": 2280,
         "wires": [
             [
-                "6e1ccc4d4d64f4e9",
-                "b232fafbcd92818f"
+                "5a3f9d0759904252"
             ]
         ]
     },
     {
-        "id": "6e1ccc4d4d64f4e9",
-        "type": "debug",
+        "id": "07a3f29152c4e612",
+        "type": "comment",
         "z": "e92da6dab713fbf2",
-        "name": "debug 84",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 620,
-        "y": 20,
+        "name": "Botón en HTML para lanzar descarga de fichero",
+        "info": "",
+        "x": 223.79004287719727,
+        "y": 2124.0822162628174,
         "wires": []
     },
     {
-        "id": "c6379ec4a869ee14",
-        "type": "debug",
+        "id": "b7e4512c8ae1f7dd",
+        "type": "comment",
         "z": "e92da6dab713fbf2",
-        "name": "debug 85",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 920,
-        "y": 20,
+        "name": "Flujo para descarga de fichero",
+        "info": "",
+        "x": 244.00026321411133,
+        "y": 2216.999942779541,
         "wires": []
     },
     {
-        "id": "fea0420843ce7208",
+        "id": "1a0ae60eec537243",
         "type": "debug",
         "z": "e92da6dab713fbf2",
-        "name": "debug 86",
+        "name": "debug 89",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -3005,15 +3336,15 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1120,
-        "y": 20,
+        "x": 800,
+        "y": 2200,
         "wires": []
     },
     {
-        "id": "d6c2470eb56a7fb3",
+        "id": "a17ddf789a348be8",
         "type": "debug",
         "z": "e92da6dab713fbf2",
-        "name": "debug 87",
+        "name": "debug 90",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -3021,8 +3352,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1460,
-        "y": 60,
+        "x": 560,
+        "y": 2120,
         "wires": []
     },
     {
@@ -3063,7 +3394,7 @@
         "tab": "886291c5904a2cf6",
         "order": 1,
         "disp": true,
-        "width": "6",
+        "width": 6,
         "collapse": false,
         "className": ""
     },
@@ -3085,7 +3416,7 @@
         "tab": "886291c5904a2cf6",
         "order": 4,
         "disp": true,
-        "width": "6",
+        "width": 6,
         "collapse": false,
         "className": ""
     },
@@ -3113,11 +3444,11 @@
     {
         "id": "ba0cb1f8909d0360",
         "type": "ui_group",
-        "name": "Cofiguracion",
+        "name": "Configuracion",
         "tab": "886291c5904a2cf6",
         "order": 5,
         "disp": true,
-        "width": "6",
+        "width": 10,
         "collapse": false,
         "className": ""
     },
