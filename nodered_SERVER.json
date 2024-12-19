@@ -134,60 +134,6 @@
         "h": 202
     },
     {
-        "id": "5bbfe1f32a8dd3da",
-        "type": "group",
-        "z": "e92da6dab713fbf2",
-        "g": "7723139f694ade65",
-        "name": "Color",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "b556181368030897",
-            "785f2fee914cb59a",
-            "1fc55a71aade72cd",
-            "e2035f2f1f3b1109",
-            "a4a0736c9ee1372d",
-            "7f773eed6ba2fd70",
-            "182658654f01ac20",
-            "a36432f02d5c61d7",
-            "a65f82e08f37fbbb",
-            "7136fe45e81fbdb8"
-        ],
-        "x": 34,
-        "y": 359,
-        "w": 652,
-        "h": 262
-    },
-    {
-        "id": "cdddb9ef78df682b",
-        "type": "group",
-        "z": "e92da6dab713fbf2",
-        "g": "7723139f694ade65",
-        "name": "Brillo",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "6af476baa5720c53",
-            "3e06980b0d0ab8f5",
-            "b60c1c8611ed6db8",
-            "9e20e3f8238ef444",
-            "3052b1b54412d981",
-            "c7295d366b6518e1",
-            "2a53159a4b84bf5e",
-            "34e600fa30ff6511",
-            "1898a6eb7d22fdbe",
-            "73efdea03cb618d6",
-            "88f5b8ef37a8cf08",
-            "72d8ea27ce2fbf21"
-        ],
-        "x": 734,
-        "y": 359,
-        "w": 732,
-        "h": 262
-    },
-    {
         "id": "a0d92a043d54fb76",
         "type": "group",
         "z": "e92da6dab713fbf2",
@@ -253,24 +199,6 @@
         "h": 302
     },
     {
-        "id": "58968961a9981b08",
-        "type": "group",
-        "z": "e92da6dab713fbf2",
-        "g": "709683779bfc6b4a",
-        "name": "Borrar todos los datos",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "86ecc3854d52b1a3",
-            "3967e5fc1e7567eb"
-        ],
-        "x": 874,
-        "y": 1459,
-        "w": 572,
-        "h": 82
-    },
-    {
         "id": "709683779bfc6b4a",
         "type": "group",
         "z": "e92da6dab713fbf2",
@@ -302,6 +230,78 @@
         "y": 1239,
         "w": 1458,
         "h": 328
+    },
+    {
+        "id": "5bbfe1f32a8dd3da",
+        "type": "group",
+        "z": "e92da6dab713fbf2",
+        "g": "7723139f694ade65",
+        "name": "Color",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "b556181368030897",
+            "785f2fee914cb59a",
+            "1fc55a71aade72cd",
+            "e2035f2f1f3b1109",
+            "a4a0736c9ee1372d",
+            "7f773eed6ba2fd70",
+            "182658654f01ac20",
+            "a36432f02d5c61d7",
+            "a65f82e08f37fbbb",
+            "7136fe45e81fbdb8"
+        ],
+        "x": 34,
+        "y": 359,
+        "w": 652,
+        "h": 262
+    },
+    {
+        "id": "cdddb9ef78df682b",
+        "type": "group",
+        "z": "e92da6dab713fbf2",
+        "g": "7723139f694ade65",
+        "name": "Brillo",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "6af476baa5720c53",
+            "3e06980b0d0ab8f5",
+            "b60c1c8611ed6db8",
+            "9e20e3f8238ef444",
+            "3052b1b54412d981",
+            "c7295d366b6518e1",
+            "2a53159a4b84bf5e",
+            "34e600fa30ff6511",
+            "1898a6eb7d22fdbe",
+            "73efdea03cb618d6",
+            "88f5b8ef37a8cf08",
+            "72d8ea27ce2fbf21"
+        ],
+        "x": 734,
+        "y": 359,
+        "w": 732,
+        "h": 262
+    },
+    {
+        "id": "58968961a9981b08",
+        "type": "group",
+        "z": "e92da6dab713fbf2",
+        "g": "709683779bfc6b4a",
+        "name": "Borrar todos los datos",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "86ecc3854d52b1a3",
+            "3967e5fc1e7567eb"
+        ],
+        "x": 874,
+        "y": 1459,
+        "w": 572,
+        "h": 82
     },
     {
         "id": "d7bf462e8e978631",
@@ -2878,8 +2878,8 @@
         "name": "",
         "spec": "rfc",
         "sep": ",",
-        "hdrin": "",
-        "hdrout": "none",
+        "hdrin": true,
+        "hdrout": "once",
         "multi": "one",
         "ret": "\\r\\n",
         "temp": "",
@@ -2901,13 +2901,13 @@
         "type": "file",
         "z": "e92da6dab713fbf2",
         "name": "",
-        "filename": "C:\\Users\\Roberto\\Downloads\\DatosTemp.csv",
+        "filename": "\\Users\\Roberto\\Desktop\\DatosTemp.csv",
         "filenameType": "str",
-        "appendNewline": true,
+        "appendNewline": false,
         "createDir": true,
-        "overwriteFile": "true",
+        "overwriteFile": "false",
         "encoding": "none",
-        "x": 1190,
+        "x": 1180,
         "y": 60,
         "wires": [
             [
