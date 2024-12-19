@@ -65,7 +65,7 @@ float temp;
 unsigned long uptime;
 
 //VARIABLES FROM */config
-int sendDataPeriod = 3*60; //period of sending */datos in seconds
+int sendDataPeriod = 10;//3*60; //period of sending */datos in seconds
 int checkUpdatePeriod = 0; //period of checking OTA in minutes -- if=0, then no periodic check
 int LEDChangePeriod = 10; //period of changing ±1% in LED Brightness, in miliseconds
 bool ControllablePin = true; //LED state interruptor - onn/off (GPIO5)
@@ -339,8 +339,8 @@ void process_mqtt_brightness(char* message){
   // { "level":75 } || { "level":75 , "id":"123456789"}
   aimLEDBrightness = body["level"];
   LEDBrightnessID = !body["id"].isNull() ? body["id"] : 0;
-  LEDBrightnessOrigin = "mqtt";
-  //LEDBrightnessOrigin = body["origin"];
+  //LEDBrightnessOrigin = "mqtt";
+  LEDBrightnessOrigin = !body["origin"].isNull() ? body["origin"] : LEDBrightnessOrigin;
 }
 
 void process_mqtt_color(char* message){
@@ -392,15 +392,13 @@ void process_mqtt_fota(){
 
 
 //process mqtt message
-void process_msg(char* topic, byte* payload, unsigned int length) {
-  serial_logln("Message received from [" + String(topic) + "]: ");
-  
+void process_msg(char* topic, byte* payload, unsigned int length) {  
   // Convertir el payload a un string
   char message[length + 1];
   strncpy(message, (char*)payload, length);
   message[length] = '\0'; 
 
-  serial_logln(message);
+  serial_logln(String("Message received from [") + String(topic) + "]: " + String(message));
 
   // Process JSON accordingly to the topic
   if (topic == topic_config) {
