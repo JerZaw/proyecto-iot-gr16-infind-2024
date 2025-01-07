@@ -1,12 +1,38 @@
-#include "DHTesp.h"
-#define rgbLedWrite neopixelWrite //se sustituye el rgbledwrite por neopixelwrite ya que la version no es la mas reciente
 #include <string>
+#include <DHTesp.h>
+
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include <HTTPUpdate.h>
 #include <HTTPClient.h>
 #include "Button2.h"
+
+
+#define WOKWI_SIM
+#ifdef WOKWI_SIM
+//-------------------PARTE NECESARIO PARA EL SIMULADOR------------------------
+#include <Adafruit_NeoPixel.h>
+// #define rgbLedWrite neopixelWrite // se sustituye el rgbledwrite por neopixelwrite ya que la version no es la mas reciente
+Adafruit_NeoPixel LED_RGB(1, 8, NEO_GRBW + NEO_KHZ800);  // Creamos el objeto que manejará el led rgb
+
+void setupSimulation(){
+  LED_RGB.begin();            // Inicia el objeto que hemos creado asociado a la librería NeoPixel 
+  LED_RGB.setBrightness(150); // Para el brillo del led
+}
+
+void simulateLED(int r, int g, int b){
+  LED_RGB.setPixelColor(0, uint32_t(LED_RGB.Color(r,   g,   b))); // set color
+  LED_RGB.show(); // Enciende el color
+}
+//-------------------PARTE NECESARIO PARA EL SIMULADOR------------------------
+#endif
+
+
+
+
+
+
 
 // URL para actualización
 // #define OTA_URL  "http://172.16.53.128:1880/esp32-ota/update"// Address of OTA update server
@@ -29,8 +55,16 @@ DHTesp dht;
 Button2 button;
 
 //connections data
+#ifndef WOKWI_SIM
 const String ssid = "infind";
 const String password = "1518wifi";
+#endif
+
+#ifdef WOKWI_SIM
+// IF IN SIMULATION:
+const String ssid = "Wokwi-GUEST";
+const String password = "";
+#endif
 
 const String server = "iot.ac.uma.es";
 const String user = "II16";
@@ -65,7 +99,7 @@ float temp;
 unsigned long uptime;
 
 //VARIABLES FROM */config
-int sendDataPeriod = 10;//3*60; //period of sending */datos in seconds
+int sendDataPeriod = 3*60; //period of sending */datos in seconds
 int checkUpdatePeriod = 0; //period of checking OTA in minutes -- if=0, then no periodic check
 int LEDChangePeriod = 10; //period of changing ±1% in LED Brightness, in miliseconds
 bool ControllablePin = true; //LED state interruptor - onn/off (GPIO5)
@@ -194,9 +228,9 @@ void connect_mqtt() {
   int willQoS = 1;  // QoS del message de LWT (nivel de calidad)
   bool willRetain = true; 
   while (!mqtt_client.connected()) {
-    serial_logln("Intentando connectr a MQTT...");
+    serial_logln("Intentando conectar a MQTT...");
     if (mqtt_client.connect(ID_PLACA.c_str(), user.c_str(), pass.c_str(),willTopic.c_str(),willQoS,willRetain,willMessage.c_str())) {
-      serial_logln(" connectdo a broker: " + server);
+      serial_logln(" conectando a broker: " + server);
       mqtt_client.subscribe(topic_config.c_str());
       mqtt_client.subscribe(topic_brightness_get.c_str());
       mqtt_client.subscribe(topic_color_get.c_str());
@@ -291,10 +325,8 @@ String mqtt_switch_body() {
   return buffer;
 }
 
-//ADD FUNCTIONS FOR ALL PUBLISHED TOPICS
 //-----------------------------------------------------
 //-----functions for processing mqtt messages-----
-//ADD FUNCTIONS FOR ALL SUBSCRIBED TOPICS
 void process_mqtt_config(char* message){
     // Parsear el JSON recibido
   StaticJsonDocument<200> body;
@@ -317,10 +349,7 @@ void process_mqtt_config(char* message){
   }
   else {
     digitalWrite(PIN_ON_OFF, LOW);
-  }
- 
-
-  
+  }  
 }
 
 void process_mqtt_brightness(char* message){
@@ -398,28 +427,33 @@ void process_msg(char* topic, byte* payload, unsigned int length) {
   strncpy(message, (char*)payload, length);
   message[length] = '\0'; 
 
+  String newTopic = topic;
+  //need to store the topic separately
+  //because the client uses the same buffer for both inbound and outbound messages
+  //SEE: https://pubsubclient.knolleary.net/api#callback
+
   serial_logln(String("Message received from [") + String(topic) + "]: " + String(message));
 
   // Process JSON accordingly to the topic
-  if (topic == topic_config) {
+  if (newTopic == topic_config) {
     process_mqtt_config(message);
   }
-  else if (topic == topic_brightness_get) {
+  else if (newTopic == topic_brightness_get) {
     process_mqtt_brightness(message);
   }
-  else if (topic == topic_color_get) {
+  else if (newTopic == topic_color_get) {
     process_mqtt_color(message);
   }
-  else if (topic == topic_switch_get) {
+  else if (newTopic == topic_switch_get) {
     process_mqtt_switch(message);
   }
-  else if (topic == topic_fota) {
+  else if (newTopic == topic_fota) {
     process_mqtt_fota();
   }
 }
 
 void bad_message(){
-  serial_logln(String("[ERROR]: ") + "Some required in received message is null!");
+  serial_logln(String("[ERROR]: ") + "Some required data in received message is null!");
 }
 
 //-----------------------------------------------------
@@ -458,15 +492,20 @@ void updateLED(unsigned long ahoraArg) {
 
     // Update the time of the last brightness change
     last_LEDBrightness_change = ahoraArg;
-
-    // Ensure new RGB values are updated
-    // currR = r * currLEDBrightness / 100;
-    // currG = g * currLEDBrightness / 100;
-    // currB = b * currLEDBrightness / 100;
   }
 
   // Update LED if brightness or color changes
+  // IF IN REAL ESP32C3-DEV BOARD: rgbLedWrite(RGB_BUILTIN, currR, currG, currB);
+  // IF IN WOKWI SIMULATION:       simulateLED(currR, currG, currB);
+  #ifdef WOKWI_SIM
+  simulateLED(currR, currG, currB);
+  #endif
+
+  #ifndef WOKWI_SIM
   rgbLedWrite(RGB_BUILTIN, currR, currG, currB);
+  #endif
+
+
 
   // If brightness reaches the target and color is correct, send MQTT message
   if ((currLEDBrightness == aimLEDBrightness) && 
@@ -536,9 +575,6 @@ void singleClick(Button2& btn) {
   publish_mqtt_message(topic_switch_set, mqtt_switch_body());
   serial_logln("click\n");
 }
-/*void longClickDetected(Button2& btn) {
-    serial_logln("long click detected");
-}*/
 void longClick(Button2& btn) {
     intenta_OTA();
 
@@ -546,13 +582,10 @@ void longClick(Button2& btn) {
 }
 void doubleClick(Button2& btn) {
     aimLEDBrightness = 100;
-    LEDBrightnessOrigin = "pulsador";
+    LEDBrightnessOrigin = "Pulsador";
 
     serial_logln("double click\n");
 }
-/*void tripleClick(Button2& btn) {
-    serial_logln("triple click\n");
-}*/
 //-----------------------------------------------------
 //-----------------------------------------------------
 

@@ -74,7 +74,8 @@
             "354299ab6f563dee",
             "8a2ae27eef722c93",
             "4fb42311617ab506",
-            "ae65e9726ba02940"
+            "ae65e9726ba02940",
+            "d96d80f4bc858932"
         ],
         "x": 934,
         "y": 979,
@@ -326,7 +327,7 @@
         "z": "e92da6dab713fbf2",
         "g": "cdddb9ef78df682b",
         "name": "LED Brillo Pub",
-        "topic": "II16/esp32c3-D9D878/led/brillo/estado",
+        "topic": "II16/esp32c3-000110/led/brillo/estado",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -349,7 +350,7 @@
         "z": "e92da6dab713fbf2",
         "g": "5bbfe1f32a8dd3da",
         "name": "LED Color Pub",
-        "topic": "II16/esp32c3-D9D878/led/color/estado",
+        "topic": "II16/esp32c3-000110/led/color/estado",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -372,7 +373,7 @@
         "z": "e92da6dab713fbf2",
         "g": "cdddb9ef78df682b",
         "name": "LED Brillo Sub",
-        "topic": "II16/esp32c3-D9D878/led/brillo",
+        "topic": "II16/esp32c3-000110/led/brillo",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -391,7 +392,7 @@
         "z": "e92da6dab713fbf2",
         "g": "5bbfe1f32a8dd3da",
         "name": "LED Color Sub",
-        "topic": "II16/esp32c3-D9D878/led/color",
+        "topic": "II16/esp32c3-000110/led/color",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -410,7 +411,7 @@
         "z": "e92da6dab713fbf2",
         "g": "48918301713603ee",
         "name": "Conexion",
-        "topic": "II16/esp32c3-D9D878/conexion",
+        "topic": "II16/esp32c3-000110/conexion",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -521,7 +522,7 @@
         "z": "e92da6dab713fbf2",
         "g": "5bbfe1f32a8dd3da",
         "name": "RGB2Hex",
-        "func": "function decimalToHex(d) {\n    var hex = d.toString(16);\n    if (hex.length == 1) hex = \"0\" + hex;\n    return hex;\n}\n\nif (msg.payload.R != null){\n    var colorHEX = \"#\" + decimalToHex(msg.payload.R)\n    + decimalToHex(msg.payload.G)\n    + decimalToHex(msg.payload.B);\n}\nelse if (msg.payload.level != null){\n    var colorHEX = \"#\" + decimalToHex(flow.get(\"R\") * msg.payload.level)\n    + decimalToHex(flow.get(\"G\") * msg.payload.level)\n    + decimalToHex(flow.get(\"B\") * msg.payload.level);\n}\n\nmsg.colorForValue = {};\nmsg.colorForValue[\"micolor\"] = colorHEX;\nmsg.payload = \"micolor\";\nreturn msg;",
+        "func": "function decimalToHex(d) {\n    var hex = d.toString(16);\n    if (hex.length == 1) hex = \"0\" + hex;\n    return hex;\n}\n\n\nlet isLedOn = flow.get(\"level\");\n\n\nif (isLedOn){\n    if (msg.payload.R != null) {\n        var colorHEX = \"#\" + decimalToHex(msg.payload.R)\n            + decimalToHex(msg.payload.G)\n            + decimalToHex(msg.payload.B);\n    }\n    else if (msg.payload.level != null) {\n        var colorHEX = \"#\" + decimalToHex(flow.get(\"R\") * msg.payload.level)\n            + decimalToHex(flow.get(\"G\") * msg.payload.level)\n            + decimalToHex(flow.get(\"B\") * msg.payload.level);\n    }\n}\nelse{\n    var colorHEX = \"#\" + decimalToHex(0)\n        + decimalToHex(0)\n        + decimalToHex(0);\n}\n\nmsg.colorForValue = {};\nmsg.colorForValue[\"micolor\"] = colorHEX;\nmsg.payload = \"micolor\";\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -737,7 +738,7 @@
         "z": "e92da6dab713fbf2",
         "g": "0ece979cdefda2e6",
         "name": "Datos",
-        "topic": "II16/esp32c3-D9D878/datos",
+        "topic": "II16/esp32c3-000110/datos",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -858,7 +859,7 @@
         "z": "e92da6dab713fbf2",
         "g": "0ece979cdefda2e6",
         "group": "9cb3afe23639a28c",
-        "order": 6,
+        "order": 2,
         "width": 0,
         "height": 0,
         "name": "Termometro",
@@ -885,7 +886,7 @@
         "g": "0ece979cdefda2e6",
         "name": "",
         "group": "9cb3afe23639a28c",
-        "order": 8,
+        "order": 3,
         "width": 0,
         "height": 0,
         "gtype": "gage",
@@ -914,7 +915,7 @@
         "g": "0ece979cdefda2e6",
         "name": "",
         "group": "9cb3afe23639a28c",
-        "order": 4,
+        "order": 1,
         "width": 0,
         "height": 0,
         "label": "",
@@ -1072,7 +1073,7 @@
         "z": "e92da6dab713fbf2",
         "g": "cbbc0d998969e22c",
         "name": "Switch Sub",
-        "topic": "II16/esp32c3-D9D878/switch/cmd",
+        "topic": "II16/esp32c3-000110/switch/cmd",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -1091,7 +1092,7 @@
         "z": "e92da6dab713fbf2",
         "g": "cbbc0d998969e22c",
         "name": "Switch Pub",
-        "topic": "II16/esp32c3-D9D878/switch/status",
+        "topic": "II16/esp32c3-000110/switch/status",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -1114,7 +1115,7 @@
         "z": "e92da6dab713fbf2",
         "g": "a0d92a043d54fb76",
         "name": "FOTA",
-        "topic": "II16/esp32c3-D9D878/FOTA",
+        "topic": "II16/esp32c3-000110/FOTA",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -1133,7 +1134,7 @@
         "z": "e92da6dab713fbf2",
         "g": "a0d92a043d54fb76",
         "name": "Config",
-        "topic": "II16/esp32c3-D9D878/config",
+        "topic": "II16/esp32c3-000110/config",
         "qos": "",
         "retain": "",
         "respTopic": "",
@@ -1177,8 +1178,7 @@
         "y": 1180,
         "wires": [
             [
-                "970bbf3c5d96c8f7",
-                "ae65e9726ba02940"
+                "970bbf3c5d96c8f7"
             ]
         ]
     },
@@ -1209,11 +1209,10 @@
         "links": [
             "b399f0c4ac1a4a36"
         ],
-        "x": 1245,
+        "x": 1295,
         "y": 1140,
         "wires": [
             [
-                "ae65e9726ba02940",
                 "970bbf3c5d96c8f7"
             ]
         ]
@@ -1335,7 +1334,8 @@
         "y": 1180,
         "wires": [
             [
-                "a46586af39594a38"
+                "a46586af39594a38",
+                "d96d80f4bc858932"
             ]
         ]
     },
@@ -1478,8 +1478,8 @@
         "links": [
             "7136fe45e81fbdb8"
         ],
-        "x": 1355,
-        "y": 1140,
+        "x": 1335,
+        "y": 1100,
         "wires": []
     },
     {
@@ -1542,7 +1542,7 @@
         "z": "e92da6dab713fbf2",
         "g": "709683779bfc6b4a",
         "name": "Datos",
-        "topic": "II16/esp32c3-D9D878/datos",
+        "topic": "II16/esp32c3-000110/datos",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -1689,7 +1689,7 @@
         "z": "e92da6dab713fbf2",
         "g": "709683779bfc6b4a",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2254,7 +2254,7 @@
         "z": "e92da6dab713fbf2",
         "g": "409e01c1ddaa3548",
         "name": "debug 82",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2271,7 +2271,7 @@
         "z": "e92da6dab713fbf2",
         "g": "409e01c1ddaa3548",
         "name": "+ fecha",
-        "func": "msg.date = new Date();\nmsg.payload = \"[\" + msg.date.toString() + \"]: \" + msg.payload;\n\nreturn msg;",
+        "func": "msg.date = new Date();\n\n// FORMAT DATE\nmsg.date = new Date();\n\n// Extract date components\nlet day = String(msg.date.getDate()).padStart(2, '0');\nlet month = String(msg.date.getMonth() + 1).padStart(2, '0'); // Months are zero-based\nlet year = msg.date.getFullYear();\n\n// Extract time components\nlet hours = String(msg.date.getHours()).padStart(2, '0');\nlet minutes = String(msg.date.getMinutes()).padStart(2, '0');\nlet seconds = String(msg.date.getSeconds()).padStart(2, '0');\n\n// Extract timezone offset in hours\nlet timezoneOffset = -msg.date.getTimezoneOffset(); // in minutes\nlet tzHours = Math.floor(timezoneOffset / 60);\nlet tzSign = tzHours >= 0 ? '+' : '-';\n\n// Format the string\nlet dateString = `${day}.${month}.${year} ${hours}:${minutes}:${seconds} GMT${tzSign}${Math.abs(tzHours)}`;\n\nmsg.payload = \"[\" + dateString + \"]: \" + msg.payload;\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -2308,7 +2308,7 @@
         "z": "e92da6dab713fbf2",
         "g": "409e01c1ddaa3548",
         "name": "Log",
-        "topic": "II16/esp32c3-D9D878/log",
+        "topic": "II16/esp32c3-000110/log",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "dcc291bb801e1410",
@@ -2320,7 +2320,8 @@
         "y": 220,
         "wires": [
             [
-                "06e06f3165dae6d7"
+                "06e06f3165dae6d7",
+                "14f071b12a2aa80b"
             ]
         ]
     },
@@ -2342,7 +2343,7 @@
         "z": "e92da6dab713fbf2",
         "g": "cdddb9ef78df682b",
         "name": "LED Brillo",
-        "func": "// Parámetros de entrada\nlet brillo = msg.payload; // Se espera que msg.payload sea el nivel de brillo\nlet chipId = \"esp32c3-D85054\"; // Ajusta esto al ID real de tu dispositivo\nlet id = msg.id || null; // Opcional: se puede enviar un identificador como parte de msg.id\n\n// Creamos el mensaje\nlet mensaje = {\n    level: brillo,\n    origin: \"test\"\n};\n\n// Añadimos el ID si está disponible\nif (id) {\n    mensaje.id = id;\n}\n\n// Establecemos el nuevo mensaje para publicarlo en el topic requerido\nmsg.topic = `IIX/${chipId}/led/brillo`;\nmsg.payload = mensaje;\n\nreturn msg;\n",
+        "func": "// Parámetros de entrada\nlet brillo = msg.payload; // Se espera que msg.payload sea el nivel de brillo\nlet chipId = \"esp32c3-D85054\"; // Ajusta esto al ID real de tu dispositivo\nlet id = msg.id || null; // Opcional: se puede enviar un identificador como parte de msg.id\nlet msgOrigin = \"no definido\";\n\nif (msg.origin == \"Telegram\"){\n    msgOrigin = \"Telegram\";\n}\nelse{\n    msgOrigin = \"Node-RED\";\n}\n\n// Creamos el mensaje\nlet mensaje = {\n    level: brillo,\n    origin: msgOrigin\n};\n\n// Añadimos el ID si está disponible\nif (id) {\n    mensaje.id = id;\n}\n\n// Establecemos el nuevo mensaje para publicarlo en el topic requerido\nmsg.topic = `IIX/${chipId}/led/brillo`;\nmsg.payload = mensaje;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2478,7 +2479,7 @@
         "z": "e92da6dab713fbf2",
         "g": "8bdb952b6f7c5ef4",
         "name": "Pregunta Brillo",
-        "func": "let message = msg.payload.content;\nlet value = message.substring(1);\nlet brightness = parseInt(value, 10);\n\nmsg.payload = brightness;\nreturn msg;\n",
+        "func": "let message = msg.payload.content;\nlet value = message.substring(1);\nlet brightness = parseInt(value, 10);\n\nmsg.payload = brightness;\nmsg.origin = \"Telegram\";\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -2849,8 +2850,8 @@
         "strings": true,
         "include_empty_strings": false,
         "include_null_values": false,
-        "x": 1690,
-        "y": 360,
+        "x": 810,
+        "y": 2380,
         "wires": [
             [
                 "8a13cf0ccf3c9948"
@@ -2866,8 +2867,8 @@
         "headers": {
             "Content-Disposition": "attachment; filename=datos.csv"
         },
-        "x": 1970,
-        "y": 480,
+        "x": 1090,
+        "y": 2500,
         "wires": []
     },
     {
@@ -2882,8 +2883,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1860,
-        "y": 360,
+        "x": 980,
+        "y": 2380,
         "wires": [
             [
                 "20981fc6c8067dbd"
@@ -3048,7 +3049,7 @@
         "name": "",
         "label": "Fecha inicio",
         "group": "9cb3afe23639a28c",
-        "order": 3,
+        "order": 5,
         "width": 0,
         "height": 0,
         "passthru": true,
@@ -3070,7 +3071,7 @@
         "name": "",
         "label": "Fecha final",
         "group": "9cb3afe23639a28c",
-        "order": 5,
+        "order": 6,
         "width": 0,
         "height": 0,
         "passthru": true,
@@ -3161,7 +3162,7 @@
         "type": "debug",
         "z": "e92da6dab713fbf2",
         "name": "debug 88",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3249,7 +3250,7 @@
         "z": "e92da6dab713fbf2",
         "group": "9cb3afe23639a28c",
         "name": "Descarga datos",
-        "order": 1,
+        "order": 4,
         "width": "0",
         "height": "0",
         "format": "<style>\n.button {\n    text-align: center;\n    font: bold 17px Arial;\n    text-decoration: none;\n    background-color: #339966;\n    color: white;\n    padding: 8px 10px;\n    border: 2px solid #CCCCCC;\n  }\n  \n  .button:hover\n  {\n   background-color: #26734d;\n  }\n\n</style>\n<a href=\"/datos\" class=\"button\">Descarga datos en CSV (EXCEL)</a>\n",
@@ -3329,7 +3330,7 @@
         "type": "debug",
         "z": "e92da6dab713fbf2",
         "name": "debug 89",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3345,7 +3346,7 @@
         "type": "debug",
         "z": "e92da6dab713fbf2",
         "name": "debug 90",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3355,6 +3356,60 @@
         "x": 560,
         "y": 2120,
         "wires": []
+    },
+    {
+        "id": "e492630373b8fcee",
+        "type": "comment",
+        "z": "e92da6dab713fbf2",
+        "name": "WOKWI ID: 000110",
+        "info": "",
+        "x": 390,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "14f071b12a2aa80b",
+        "type": "debug",
+        "z": "e92da6dab713fbf2",
+        "name": "debug 91",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "d96d80f4bc858932",
+        "type": "change",
+        "z": "e92da6dab713fbf2",
+        "g": "cbbc0d998969e22c",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "level",
+                "pt": "flow",
+                "to": "payload.level",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1230,
+        "y": 1100,
+        "wires": [
+            [
+                "ae65e9726ba02940"
+            ]
+        ]
     },
     {
         "id": "dcc291bb801e1410",
