@@ -224,7 +224,7 @@ void publish_mqtt_message(String topic, String body, bool isRetained = false){
 void connect_mqtt() {
   // Loop until we're reconnected
   String willTopic = topic_connection;  // El tópico de LWT (conexion_topic)
-  String willMessage = "{\"CHIPID\" : \"esp32c3-" + CHIPID + "\", \"online\" : false}";  // message de LWT para indicar desconexión
+  String willMessage = "{\"CHIPID\" : \"" + CHIPID + "\", \"online\" : false}";  // message de LWT para indicar desconexión
   int willQoS = 1;  // QoS del message de LWT (nivel de calidad)
   bool willRetain = true; 
   while (!mqtt_client.connected()) {
